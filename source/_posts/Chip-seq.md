@@ -1,6 +1,6 @@
 ---
 title: Chip-seq study notes
-date: 2024-02-07 12:39:13
+date: 2024-02-07 15:39:13
 tags: 
     - Bioinformatics
     - Omics
