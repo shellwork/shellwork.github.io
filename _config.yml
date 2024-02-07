@@ -5,7 +5,7 @@
 # Site
 title: Baiding Chen's blog
 subtitle: 'Fight for what I love!'
-description: 'A Biostatistic student who loves BME more!'
+description: 'A Bioinformatics student who loves BME more!'
 keywords: 
 # pay attention!
 author: Baiding Chen
@@ -120,7 +120,7 @@ algolia:
   appId: "RAYWM9EI3X"
   apiKey: "cc1a1ff7c83560e47569aacc3c82bc15"
   adminApiKey: "d0e49f0537636075df1cd842a4bedd26"
-  chunkSize: 5000
+  chunkSize: 3000
   indexName: hexo_blog_search
   fields:
     - content:strip:truncate,0,60
