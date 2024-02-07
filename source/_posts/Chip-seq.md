@@ -1,6 +1,13 @@
-# Chip-seq 学习笔记
+---
+title: Chip-seq study notes
+date: 2024-02-07 12:39:13
+tags: 
+    - Bioinformatics
+    - Omics
+---
 
-## 1.Chip-seq实验
+
+## Chip-seq实验
 
 + 概念
     + Chip-seq(Chromatin Immunoprecipitation,CHIP)研究体内蛋白质和DNA相互作用的工具，用于转录因子结合位点或组蛋白特异性修饰位点的研究 
@@ -28,7 +35,7 @@
     4. DNA解交联及纯化
     5. 测序数据分析
 
-## 2.数据分析使用工具(使用bioconda下载 conda install -r bioconda)
+## 数据分析使用工具(使用bioconda下载 conda install -r bioconda)
 + sra-tools:操作SRA（reads and reference alignments）数据的工具集，用于从SRA文件中提取fastq文件
 + bowtie2：将短序列比对导模板基因组的工具，擅长将50-100bp的比对
 + samtools：用于SAM格式后处理对齐的程序。
@@ -39,7 +46,7 @@
 + deeptool：可视化格式转化工具
 + ROSE（上官网wget下载压缩包）：通过bam文件以及gff文件寻找enhancer及其相关基因的工具
 
-## 3.Chip-seq pipline流程
+## Chip-seq pipline流程
 
 + ![Chip-seq数据处理流程](image-3.png)
 1. 下载Chip-seq原始数据
