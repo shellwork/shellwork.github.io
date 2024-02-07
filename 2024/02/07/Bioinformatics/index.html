@@ -1,0 +1,232 @@
+<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta http-equiv="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"><meta name="description" content="Bioinformatics study notes"><meta name="keywords" content="Bioinformatics"><meta name="author" content="Baiding Chen"><meta name="copyright" content="Baiding Chen"><title>Bioinformatics study notes | Baiding Chen's blog</title><link rel="shortcut icon" href="/shield-cat-solid.svg"><link rel="stylesheet" href="/css/index.css?version=1.9.1"><link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/font-awesome@latest/css/font-awesome.min.css?version=1.9.1"><link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.3.1/css/all.css?version=1.9.1"><meta name="format-detection" content="telephone=no"><meta http-equiv="x-dns-prefetch-control" content="on"><link rel="dns-prefetch" href="https://cdn.jsdelivr.net"><meta http-equiv="Cache-Control" content="no-transform"><meta http-equiv="Cache-Control" content="no-siteapp"><script>var GLOBAL_CONFIG = { 
+  root: '/',
+  algolia: undefined,
+  localSearch: {"path":"search.xml","languages":{"hits_empty":"We didn't find any results for the search: ${query}"}},
+  copy: {
+    success: 'Copy successfully',
+    error: 'Copy error',
+    noSupport: 'The browser does not support'
+  },
+  hexoVersion: '6.3.0'
+} </script><meta name="generator" content="Hexo 6.3.0"></head><body><i class="fa fa-arrow-right" id="toggle-sidebar" aria-hidden="true"></i><div id="sidebar" data-display="true"><div class="toggle-sidebar-info text-center"><span data-toggle="Toggle article">Toggle site</span><hr></div><div class="sidebar-toc"><div class="sidebar-toc__title">Catalog</div><div class="sidebar-toc__progress"><span class="progress-notice">You've read</span><span class="progress-num">0</span><span class="progress-percentage">%</span><div class="sidebar-toc__progress-bar"></div></div><div class="sidebar-toc__content"><ol class="toc"><li class="toc-item toc-level-2"><a class="toc-link" href="#common-sence-on-bioinformatics"><span class="toc-number">1.</span> <span class="toc-text"> Common sence on bioinformatics</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%B7%AE%E5%BC%82%E5%88%86%E6%9E%90"><span class="toc-number">1.1.</span> <span class="toc-text"> 差异分析</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#%E5%AF%8C%E9%9B%86%E5%88%86%E6%9E%90"><span class="toc-number">1.2.</span> <span class="toc-text"> 富集分析</span></a></li></ol></li><li class="toc-item toc-level-2"><a class="toc-link" href="#common-bioinformatics-analysis-methods"><span class="toc-number">2.</span> <span class="toc-text"> Common bioinformatics analysis methods</span></a><ol class="toc-child"><li class="toc-item toc-level-3"><a class="toc-link" href="#kegggo-analysis"><span class="toc-number">2.1.</span> <span class="toc-text"> KEGG&#x2F;Go analysis</span></a><ol class="toc-child"><li class="toc-item toc-level-4"><a class="toc-link" href="#1-reference-pathway"><span class="toc-number">2.1.1.</span> <span class="toc-text"> 1). Reference pathway</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#2-%E7%89%A9%E7%A7%8D%E7%89%B9%E5%BC%82%E6%80%A7%E9%80%9A%E8%B7%AF-org"><span class="toc-number">2.1.2.</span> <span class="toc-text"> 2). 物种特异性通路 (org)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#3-%E7%9B%B4%E7%B3%BB%E5%90%8C%E6%BA%90%E7%89%A9%E9%80%9A%E8%B7%AF-ko"><span class="toc-number">2.1.3.</span> <span class="toc-text"> 3). 直系同源物通路 (ko)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#4-%E9%85%B6%E9%80%9A%E8%B7%AFec"><span class="toc-number">2.1.4.</span> <span class="toc-text"> 4). 酶通路(ec)</span></a></li><li class="toc-item toc-level-4"><a class="toc-link" href="#5-%E5%8F%8D%E5%BA%94%E9%80%9A%E8%B7%AF-reaction"><span class="toc-number">2.1.5.</span> <span class="toc-text"> 5). 反应通路 (reaction)</span></a></li></ol></li><li class="toc-item toc-level-3"><a class="toc-link" href="#gsea-analysis"><span class="toc-number">2.2.</span> <span class="toc-text"> GSEA analysis</span></a></li><li class="toc-item toc-level-3"><a class="toc-link" href="#proteomics-analysis"><span class="toc-number">2.3.</span> <span class="toc-text"> Proteomics analysis</span></a></li></ol></li></ol></div></div><div class="author-info hide"><div class="author-info__avatar text-center"><img src="https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fitem%2F201508%2F02%2F20150802143001_5ifMH.jpeg&amp;refer=http%3A%2F%2Fc-ssl.duitang.com&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1679853072&amp;t=13c7a627598402f08c8f38679c345f69"></div><div class="author-info__name text-center">Baiding Chen</div><div class="author-info__description text-center">A Biostatistic student who loves BME more!</div><div class="follow-button"><a target="_blank" rel="noopener" href="https://github.com/shellwork">Follow</a></div><hr><div class="author-info-articles"><a class="author-info-articles__archives article-meta" href="/archives"><span class="pull-left">Articles</span><span class="pull-right">5</span></a><a class="author-info-articles__tags article-meta" href="/tags"><span class="pull-left">Tags</span><span class="pull-right">4</span></a></div></div></div><div id="content-outer"><div id="top-container" style="background-image: url(https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fblog%2F201408%2F22%2F20140822000703_Yc3hT.jpeg&amp;refer=http%3A%2F%2Fc-ssl.duitang.com&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1679852664&amp;t=fa8ec29d81db150113265eadafb0bae1)"><div id="page-header"><span class="pull-left"> <a id="site-name" href="/">Baiding Chen's blog</a></span><i class="fa fa-bars toggle-menu pull-right" aria-hidden="true"></i><span class="pull-right menus">   <a class="site-page" href="/">Home</a><a class="site-page" href="/about">About</a><a class="site-page" href="/archives">Archives</a><a class="site-page" href="/tags">Tags</a><a class="site-page" href="/categories">Categories</a><a class="site-page" href="/gallery">Gallery</a><a class="site-page" href="/slides">Slides</a></span><span class="pull-right"><a class="site-page social-icon search"><i class="fa fa-search"></i><span> Search</span></a></span></div><div id="post-info"><div id="post-title">Bioinformatics study notes</div><div id="post-meta"><time class="post-meta__date"><i class="fa fa-calendar" aria-hidden="true"></i> 2024-02-07</time><div class="post-meta-wordcount"><span>Word count: </span><span class="word-count">2.6k</span><span class="post-meta__separator">|</span><span>Reading time: 8 min</span></div></div></div></div><div class="layout" id="content-inner"><article id="post"><div class="article-container" id="post-content"><h2 id="common-sence-on-bioinformatics"><a class="markdownIt-Anchor" href="#common-sence-on-bioinformatics"></a> Common sence on bioinformatics</h2>
+<h3 id="差异分析"><a class="markdownIt-Anchor" href="#差异分析"></a> 差异分析</h3>
+<ul>
+<li>为什么需要做差异分析？
+<ul>
+<li>差异分析就是分析两组数据在何种指标下有差异。在转录组的基因差异表达分析中，一般的筛选标准是基因表达差异倍数大于2、并且FDR≤0.05为显著差异的基因,当然这个标准也可以根据实际数据调整。</li>
+</ul>
+</li>
+<li>差异分析原理
+<ul>
+<li>差异分析的原理就是判断组间（处理）差异是否显著大于组内（误差）差异。</li>
+</ul>
+<blockquote>
+<p>由于二代数据得到的基因表达丰度是reads count，属于离散型分布，所以主流的方法是用负二项分布（属于离散型分布）模型进行检验。主流差异分析软件edgeR、Deseq都采用负二项分布。二代数据工具不能使用t检验、方差分析等这些基于正态分布模型的检验方法。</p>
+</blockquote>
+</li>
+<li>分析步骤
+<ul>
+<li>数据准备，提供符合格式的数据表格</li>
+<li>参数设置（检验值、检验阈值、差异倍数、离散系数）</li>
+<li>解读结果
+<ul>
+<li>差异比较结果柱状图</li>
+<li>差异基因火山图</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>差异分析数据要求
+<ul>
+<li>表达矩阵和分组信息（count矩阵）</li>
+</ul>
+</li>
+</ul>
+<h3 id="富集分析"><a class="markdownIt-Anchor" href="#富集分析"></a> 富集分析</h3>
+<ul>
+<li>为什么需要做富集分析？
+<ul>
+<li>在我们进行差异表达分析的时候，我们会得到很多的差异表达基因。这些基因如果只是按照基因名放到哪里的话，我们很难找到一个规律说这些有基因之间有什么关系，所以为了更情况的看清楚这些基因的功能，我们就使用了富集分析。</li>
+<li>利用富集分析，我们就可以把很多看着杂乱的差异基因总结出一个比较整体反应事件发生的概述性的句子。例如：TP53信号通路和胃癌的发生有关。而不是说BAX、BID、ABL1、ATM、BCL2、BOK、CDKN1A这7个基因和胃癌的发生有关系。<br>
+<img src="/2024/02/07/Bioinformatics/image-11.png" alt="example"></li>
+</ul>
+</li>
+<li>富集分析数据要求
+<ul>
+<li>GO/KEGG：两种分析基因和通路的数据库，输入数据均是差异表达分析的结果，数据内容为差异基因名称（编号）</li>
+<li>GSEA：一种不依赖于差异表达分析的算法（也有自己的细分数据库MSigDB），数据类型为差异基因名称和Log2FoldChange（差异倍数的对数值）</li>
+</ul>
+</li>
+</ul>
+<ol start="3">
+<li>如何解读分析结果
+<ul>
+<li>差异分析:<br>
++</li>
+<li>富集分析：
+<ul>
+<li>GSEA：
+<blockquote>
+<p><img src="/2024/02/07/Bioinformatics/image-13.png" alt="GSEA_解读"><br>
+第一部分：为基因 Enrichment Score 的折线图，横轴为该基因下的每个基因，纵轴为对应的 Running ES，在折线图中有个峰值，该峰值就是这个基因集的 Enrichemnt score，峰值之前的基因就是该基因集下的核心基因，核心基因就是在单细胞很重要很关键的基因，如果基因在顶部富集，我们可以说，从总体上看，该基因集是上调趋势，反之，如果在底部富集，则是下调趋势；<br>
+第二部分：也就是hit值，也就是图中的黑线出现的位置，这个黑线可以看出第一部分每次折现点的基因的位置;<br>
+第三部分：这是rank值图，采用了 Signal2Noise 算法，我对他的理解是，纵轴它反映了基因集中的每个基因的相对表达量，横轴可以看出这是这个基因在基因数据集中出现的位置。</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ol>
+<h2 id="common-bioinformatics-analysis-methods"><a class="markdownIt-Anchor" href="#common-bioinformatics-analysis-methods"></a> Common bioinformatics analysis methods</h2>
+<h3 id="kegggo-analysis"><a class="markdownIt-Anchor" href="#kegggo-analysis"></a> KEGG/Go analysis</h3>
+<ol>
+<li>
+<p>What is KEGG?<br>
+Kanehisa实验室 在1995年开发的KEGG数据库，全称为 Kyoto Encyclopedia of Genes and Genomes（京都基因与基因组百科全书）。它拥有多个子数据库，包含基因组，生化反应，生化物质，疾病与药物，以及 <strong>最常用PATHWAY通路信息</strong> 。<br>
+<a target="_blank" rel="noopener" href="https://www.kegg.jp/kegg/pathway.html">KEGG Links</a></p>
+<blockquote>
+<p>什么是富集分析：这里pathway富集的含义与GO富集的含义相同，也是表示差异基因中注释到某个代谢通路的基因数目在所有差异基因中的比例显著大于背景基因中注释到某个代谢通路的基因数目在所有背景基因中的比例。</p>
+</blockquote>
+</li>
+<li>
+<p>What is GO?<br>
+GO数据库，全称是Gene Ontology(基因本体)，他们把<strong>基因本身的功能</strong>分成了三个部分分别是：细胞组分（cellular component, CC）、分子功能（molecular function, MF）、生物过程（biological process, BP）</p>
+<blockquote>
+<p>Difference with KEGG? KEGG是通路相关的数据库,GO是基因自身功能的数据库。<br>
+Relationship? GO和KEGG是两个数据库，里面有每个基因相关的功能信息，而富集分析就是一个把这些功能进行进行整合计算的算法</p>
+</blockquote>
+</li>
+<li>
+<p>Database Structure<br>
+<img src="/2024/02/07/Bioinformatics/image.png" alt="structure"></p>
+</li>
+<li>
+<p>KEGG pathway<br>
+每个通路都由一个五位数字标识，后跟以下任意一个：map，ko，ec，rn和三字母或四字母生物代码，它们分别代表五种通路类型：</p>
+<ul>
+<li>map编号：代表reference pathway，根据已有的知识绘制的、概括的、详尽的具有一般参考意义的代谢图。 一个点同时表示一个基因，这个基因编码的酶或这个酶参加的反应</li>
+<li>org编号：物种特异性通路，这里就是将K编号基因（直系同源基因，后面会介绍）换为每个物种中对应的基因</li>
+<li>ko编号：KO通路中的点表示直系同源基因</li>
+<li>ec编号：EC通路中的点表示相关的酶</li>
+<li>rn编号：化学反应通路中的点只表示该点参与的某个反应、反应物及反应类型</li>
+</ul>
+<h4 id="1-reference-pathway"><a class="markdownIt-Anchor" href="#1-reference-pathway"></a> 1). Reference pathway</h4>
+<p>这里以 TCA循环 的通路图为例，进入参考通路图(Reference pathway)。<br>
+<img src="/2024/02/07/Bioinformatics/image-1.png" alt="TCA"><br>
+<img src="/2024/02/07/Bioinformatics/image-2.png" alt="TCA_notes"></p>
+<h4 id="2-物种特异性通路-org"><a class="markdownIt-Anchor" href="#2-物种特异性通路-org"></a> 2). 物种特异性通路 (org)</h4>
+<p>我们选择人的物种名<code>homo sapiens</code> (human)，点击Go。可以看到与Reference pathway 图（map00020）不同的是有物种特异性基因被标注为绿色，而且通路编号为<code>hsa00020</code></p>
+<p><a target="_blank" rel="noopener" href="https://www.kegg.jp/kegg-bin/show_pathway?org_name=hsa&amp;mapno=00020&amp;mapscale=&amp;show_description=hide">示例通路</a></p>
+<p><img src="/2024/02/07/Bioinformatics/image-3.png" alt="org"><br>
+点击绿色基因，会进入Gene详细信息<br>
+<img src="/2024/02/07/Bioinformatics/image-4.png" alt="org_note"></p>
+<h4 id="3-直系同源物通路-ko"><a class="markdownIt-Anchor" href="#3-直系同源物通路-ko"></a> 3). 直系同源物通路 (ko)</h4>
+<p>KEGG的开发者根据不同生物之间基因和基因组的保守和变异，引入直系同源物（KO）的概念。<br>
+蓝色框超链接到从原始版本中选择的KO条目<br>
+<img src="/2024/02/07/Bioinformatics/image-5.png" alt="ko"><br>
+进入<code>PCK</code>的直系同源基因信息<br>
+<img src="/2024/02/07/Bioinformatics/image-6.png" alt="ko_note"></p>
+<h4 id="4-酶通路ec"><a class="markdownIt-Anchor" href="#4-酶通路ec"></a> 4). 酶通路(ec)</h4>
+<p>蓝色框超链接到从原始版本中选择的ENZYME条目<br>
+<img src="/2024/02/07/Bioinformatics/image-7.png" alt="ec"><br>
+进入<code>ENZYME</code><br>
+<img src="/2024/02/07/Bioinformatics/image-8.png" alt="ec_note"></p>
+<h4 id="5-反应通路-reaction"><a class="markdownIt-Anchor" href="#5-反应通路-reaction"></a> 5). 反应通路 (reaction)</h4>
+<p>反应通路 (reaction)<br>
+<img src="/2024/02/07/Bioinformatics/image-9.png" alt="reaction"><br>
+点击后进入对应的反应信息界面，如下图<br>
+<img src="/2024/02/07/Bioinformatics/image-10.png" alt="reaction_details"></p>
+</li>
+<li>
+<p>GO Database</p>
+</li>
+<li>
+<p>kegg/GO pipeline</p>
+<ol>
+<li>载入差异化表达数据并调整数据格式</li>
+</ol>
+ <figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#载入差异表达数据，只需基因ID(GO,KEGG,GSEA需要)和Log2FoldChange(GSEA需要)即可</span></span><br><span class="line">info <span class="operator">&lt;-</span> read.csv<span class="punctuation">(</span><span class="string">&quot;./DEGs_test_data/Del19_to_p.L858R_raw.csv&quot;</span><span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#指定富集分析的物种库</span></span><br><span class="line">GO_database <span class="operator">&lt;-</span> <span class="string">&#x27;org.Hs.eg.db&#x27;</span> <span class="comment">#GO分析指定物种，物种缩写索引表详见http://bioconductor.org/packages/release/BiocViews.html#___OrgDb</span></span><br><span class="line">KEGG_database <span class="operator">&lt;-</span> <span class="string">&#x27;hsa&#x27;</span> <span class="comment">#KEGG分析指定物种，物种缩写索引表详见http://www.genome.jp/kegg/catalog/org_list.html</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#gene ID转换</span></span><br><span class="line">gene <span class="operator">&lt;-</span> bitr<span class="punctuation">(</span>info<span class="operator">$</span>gene<span class="punctuation">,</span>fromType <span class="operator">=</span> <span class="string">&#x27;SYMBOL&#x27;</span><span class="punctuation">,</span>toType <span class="operator">=</span> <span class="string">&#x27;ENTREZID&#x27;</span><span class="punctuation">,</span>OrgDb <span class="operator">=</span> GO_database<span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+<ol start="2">
+<li>带入R包分析</li>
+</ol>
+ <figure class="highlight r"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">GO<span class="operator">&lt;-</span>enrichGO<span class="punctuation">(</span> gene<span class="operator">$</span>ENTREZID<span class="punctuation">,</span><span class="comment">#GO富集分析</span></span><br><span class="line">        OrgDb <span class="operator">=</span> GO_database<span class="punctuation">,</span></span><br><span class="line">        keyType <span class="operator">=</span> <span class="string">&quot;ENTREZID&quot;</span><span class="punctuation">,</span><span class="comment">#设定读取的gene ID类型</span></span><br><span class="line">        ont <span class="operator">=</span> <span class="string">&quot;ALL&quot;</span><span class="punctuation">,</span><span class="comment">#(ont为ALL因此包括Biological Process,Cellular Component,Mollecular Function三部分）</span></span><br><span class="line">        pvalueCutoff <span class="operator">=</span> <span class="number">0.05</span><span class="punctuation">,</span><span class="comment">#设定p值阈值</span></span><br><span class="line">        qvalueCutoff <span class="operator">=</span> <span class="number">0.05</span><span class="punctuation">,</span><span class="comment">#设定q值阈值</span></span><br><span class="line">        readable <span class="operator">=</span> <span class="built_in">T</span><span class="punctuation">)</span></span><br><span class="line"></span><br><span class="line">KEGG<span class="operator">&lt;-</span>enrichKEGG<span class="punctuation">(</span>gene<span class="operator">$</span>ENTREZID<span class="punctuation">,</span><span class="comment">#KEGG富集分析</span></span><br><span class="line">        organism <span class="operator">=</span> KEGG_database<span class="punctuation">,</span></span><br><span class="line">        pvalueCutoff <span class="operator">=</span> <span class="number">0.05</span><span class="punctuation">,</span></span><br><span class="line">        qvalueCutoff <span class="operator">=</span> <span class="number">0.05</span><span class="punctuation">)</span></span><br></pre></td></tr></table></figure>
+</li>
+</ol>
+<h3 id="gsea-analysis"><a class="markdownIt-Anchor" href="#gsea-analysis"></a> GSEA analysis</h3>
+<ol>
+<li>
+<p>What is GSEA?</p>
+<p>基因集富集分析（Gene Set Enrichment Analysis，GSEA）：用一个预先定义的基因集中的基因来评估在与表型相关度排序的基因表中的分布趋势，从而判断其对表型的贡献。</p>
+</li>
+<li>
+<p>GSEA analysis principle</p>
+<ol>
+<li>
+<p>背景基因排序：将全部基因按照某种指标（差异分析p值，表型相关性，表达量等）进行排序，比如log2FC排序。</p>
+</li>
+<li>
+<p>目标基因富集：将某个特定类型的基因在排序表中标出，目标基因可以是某个通路或GO terms的基因等。</p>
+</li>
+<li>
+<p>计算富集分数：使用加权法，计算ES值变化。对位于中部（与性状相关性低）的部分采用较小的权值，所以越集中在两端，与表型的相关性越高。ES曲线最大值为富集分数（Enrichment Score）。</p>
+</li>
+<li>
+<p>Permutation test：对基因集的ES值进行显著性检验及多重假设检验，从而计算出显著富集的基因集。</p>
+</li>
+</ol>
+</li>
+</ol>
+<ul>
+<li>问题：一个富集到的通路下，既有上调差异基因，也有下调差异基因，那么这条通路总体的表现形式究竟是怎样呢，是被抑制还是激活？
+<ul>
+<li>解决方案：GSEA的输入是一个基因表达量矩阵，其中的样本分成了A和B两组，首先对所有基因进行排序，用来表示基因在两组间表达量的变化趋势。</li>
+</ul>
+<blockquote>
+<p><img src="/2024/02/07/Bioinformatics/image-12.png" alt="GSEA"><br>
+GSEA分析的是一个基因集下的所有基因是否在这个排序列表的顶部或者底部富集，如果在顶部富集，我们可以说，从总体上看，该基因集是上调趋势，反之，如果在底部富集，则是下调趋势。</p>
+</blockquote>
+</li>
+</ul>
+<ol start="3">
+<li>GSEA pipeline</li>
+</ol>
+<h3 id="proteomics-analysis"><a class="markdownIt-Anchor" href="#proteomics-analysis"></a> Proteomics analysis</h3>
+<ol>
+<li>Proteomics pipline</li>
+</ol>
+<ul>
+<li>原始谱图搜库: 得到大量蛋白质的鉴定和定量信息</li>
+<li>定量数据统计和展示: 关注蛋白鉴定数目、肽段鉴定数目、肽段分布情况以及样品相关性和重复性</li>
+<li>差异表达分析: 找出不同处理组间差异表达蛋白</li>
+<li>功能注释和富集分析: 对蛋白的功能、分布、参与的通路等方面进行注释和富集，为后续生物学和功能机制的研究提供参考和线索
+<ul>
+<li>工具：GO/KEGG</li>
+</ul>
+</li>
+<li>互作网络分析: 寻找蛋白质之间的关联性
+<ul>
+<li>工具：STRING</li>
+</ul>
+</li>
+</ul>
+<p>具体操作步骤（以赛默飞下机数据.raw为例）</p>
+<ul>
+<li>Step1: .raw质谱原始数据处理
+<ul>
+<li>使用ProteoWizard MSConvert工具将.raw转换为开放格式.mzXML/.mzML<br>
+<img src="/2024/02/07/Bioinformatics/image-14.png" alt="MSConvert"><br>
+使用默认参数不过滤的话，转换的文件会非常大（比源文件增加数倍，因为它把一些无强度的峰也加进去了），速度也巨慢。一般Filters需要设置为Peak Picking，MS Levels设为1-2。<br>
+<img src="/2024/02/07/Bioinformatics/image-15.png" alt="MSconvert"><br>
+而且要注意，选择后记得按Add，否则还是没有加入peakPicking，并且要将peakPicking放在第一行（行可拖动）。<br>
+<img src="/2024/02/07/Bioinformatics/image-16.png" alt="Msconvert"></li>
+<li></li>
+</ul>
+</li>
+<li>Step2:</li>
+</ul>
+</div></article><div class="post-copyright"><div class="post-copyright__author"><span class="post-copyright-meta">Author: </span><span class="post-copyright-info"><a href="mailto:undefined">Baiding Chen</a></span></div><div class="post-copyright__type"><span class="post-copyright-meta">Link: </span><span class="post-copyright-info"><a href="http://shellwork.github.io/2024/02/07/Bioinformatics/">http://shellwork.github.io/2024/02/07/Bioinformatics/</a></span></div><div class="post-copyright__notice"><span class="post-copyright-meta">Copyright Notice: </span><span class="post-copyright-info">All articles in this blog are licensed under <a target="_blank" rel="noopener" href="https://creativecommons.org/licenses/by-nc-sa/4.0/">CC BY-NC-SA 4.0</a> unless stating additionally.</span></div></div><div class="post-meta__tag-list"><a class="post-meta__tags" href="/tags/Bioinformatics/">Bioinformatics</a></div><nav id="pagination"><div class="prev-post pull-left"><a href="/2024/02/07/Pharmacology/"><i class="fa fa-chevron-left">  </i><span>Pharmacology Study Notes</span></a></div><div class="next-post pull-right"><a href="/2024/02/07/Mass%20Spectrometer%20Study/"><span>Mass Spectrometer Study</span><i class="fa fa-chevron-right"></i></a></div></nav></div></div><footer class="footer-bg" style="background-image: url(https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fc-ssl.duitang.com%2Fuploads%2Fblog%2F201408%2F22%2F20140822000703_Yc3hT.jpeg&amp;refer=http%3A%2F%2Fc-ssl.duitang.com&amp;app=2002&amp;size=f9999,10000&amp;q=a80&amp;n=0&amp;g=0n&amp;fmt=auto?sec=1679852664&amp;t=fa8ec29d81db150113265eadafb0bae1)"><div class="layout" id="footer"><div class="copyright">&copy;2013 - 2024 By Baiding Chen</div><div class="framework-info"><span>Driven - </span><a target="_blank" rel="noopener" href="http://hexo.io"><span>Hexo</span></a><span class="footer-separator">|</span><span>Theme - </span><a target="_blank" rel="noopener" href="https://github.com/Molunerfinn/hexo-theme-melody"><span>Melody</span></a></div><div class="footer_custom_text">Momo misses Caca every night!</div><div class="busuanzi"><script async src="//busuanzi.ibruce.info/busuanzi/2.3/busuanzi.pure.mini.js"></script><span id="busuanzi_container_page_pv"><i class="fa fa-file"></i><span id="busuanzi_value_page_pv"></span><span></span></span></div></div></footer><i class="fa fa-arrow-up" id="go-up" aria-hidden="true"></i><script src="https://cdn.jsdelivr.net/npm/animejs@latest/lib/anime.min.js"></script><script src="https://cdn.jsdelivr.net/npm/jquery@latest/dist/jquery.min.js"></script><script src="https://cdn.jsdelivr.net/npm/@fancyapps/fancybox@latest/dist/jquery.fancybox.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-animate@latest/velocity.min.js"></script><script src="https://cdn.jsdelivr.net/npm/velocity-ui-pack@latest/velocity.ui.min.js"></script><script src="/js/utils.js?version=1.9.1"></script><script src="/js/fancybox.js?version=1.9.1"></script><script src="/js/sidebar.js?version=1.9.1"></script><script src="/js/copy.js?version=1.9.1"></script><script src="/js/fireworks.js?version=1.9.1"></script><script src="/js/transition.js?version=1.9.1"></script><script src="/js/scroll.js?version=1.9.1"></script><script src="/js/head.js?version=1.9.1"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex@latest/dist/katex.min.css"><script src="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.js"></script><link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/katex-copytex@latest/dist/katex-copytex.min.css"><script src="/js/katex.js"></script><script src="/js/search/local-search.js"></script><script>if(/Android|webOS|iPhone|iPod|iPad|BlackBerry/i.test(navigator.userAgent)) {
+  $('#nav').addClass('is-mobile')
+  $('footer').addClass('is-mobile')
+  $('#top-container').addClass('is-mobile')
+}</script><div class="search-dialog" id="local-search"><div class="search-dialog__title" id="local-search-title">Local search</div><div id="local-input-panel"><div id="local-search-input"><div class="local-search-box"><input class="local-search-box--input" placeholder="Search for Posts"></div></div></div><hr><div id="local-search-results"><div id="local-hits"></div><div id="local-stats"><div class="local-search-stats__hr" id="hr"><span>Powered by</span> <a target="_blank" rel="noopener" href="https://github.com/wzpan/hexo-generator-search" style="color:#49B1F5;">hexo-generator-search</a></div></div></div><span class="search-close-button"><i class="fa fa-times"></i></span></div><div class="search-mask"></div></body></html>
