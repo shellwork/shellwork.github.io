@@ -1,0 +1,23 @@
+{
+  "name": "hexo_blog_search",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "start": "parcel index.html --port 3000",
+    "build": "parcel build index.html",
+    "lint": "eslint . && prettier --check .",
+    "lint:fix": "eslint . --fix && prettier --write ."
+  },
+  "devDependencies": {
+    "eslint": "8.15.0",
+    "parcel": "2.0.1",
+    "prettier": "2.6.2"
+  },
+  "dependencies": {
+    "@algolia/autocomplete-js": "1.16.0",
+    "@algolia/autocomplete-plugin-recent-searches": "1.16.0",
+    "@algolia/autocomplete-plugin-query-suggestions": "1.16.0",
+    "algoliasearch": "4",
+    "instantsearch.js": "4.64.3"
+  }
+}

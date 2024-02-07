@@ -14,7 +14,7 @@ timezone: 'UTC'
 
 # URL
 ## Set your site url here. For example, if you use GitHub Page, set url as 'https://username.github.io/project'
-url: http://example.com
+url: http://shellwork.github.io
 permalink: :year/:month/:day/:title/
 permalink_defaults:
 pretty_urls:
@@ -96,7 +96,8 @@ exclude:
 ignore:
 
 # Extensions
-## Plugins: https://hexo.io/plugins/
+plugins:
+  - hexo-algoliasearch
 ## Themes: https://hexo.io/themes/
 theme: melody
 
@@ -114,4 +115,20 @@ markdown_it_plus:
       enable: true
       options:
         strict: false
+
+algolia:
+  appId: "RAYWM9EI3X"
+  apiKey: "cc1a1ff7c83560e47569aacc3c82bc15"
+  adminApiKey: "d0e49f0537636075df1cd842a4bedd26"
+  chunkSize: 5000
+  indexName: "hexo_blog_search"
+  fields:
+    - content:strip:truncate,0,500
+    - excerpt:strip
+    - gallery
+    - permalink
+    - photos
+    - slug
+    - tags
+    - title
 
