@@ -171,8 +171,8 @@ table td {
   margin: 1rem 0;
   padding: 0;
   padding-top: 1.4rem;
-  background: #263238;
-  color: #eff;
+  background: #f6f8fa;
+  color: #90a4ae;
   font-size: 14px;
   line-height: 20px;
 }
@@ -199,7 +199,7 @@ blockquote {
 .article-container pre code {
   padding: 0;
   background: none;
-  color: #eff;
+  color: #90a4ae;
   text-shadow: none;
 }
 .article-container .highlight {
@@ -212,7 +212,7 @@ blockquote {
   z-index: 0;
   min-width: 100%;
   height: 1.4rem;
-  background: #1c2429;
+  background: #e6ebf1;
   content: "";
 }
 .article-container .highlight pre {
@@ -221,8 +221,8 @@ blockquote {
   border: none;
 }
 .article-container .highlight .line::selection {
-  background: rgba(128,203,196,0.125);
-  color: #eff;
+  background: rgba(128,203,196,0.251);
+  color: #90a4ae;
 }
 .article-container .highlight table {
   position: relative;
@@ -236,7 +236,7 @@ blockquote {
   z-index: 0;
   width: 100%;
   height: 1.4rem;
-  background: #1c2429;
+  background: #e6ebf1;
   content: "";
 }
 .article-container .highlight td {
@@ -251,7 +251,7 @@ blockquote {
   padding: 0.2em 0 0.2em 0.7rem;
   width: 100%;
   height: 1.4em;
-  color: #eff;
+  color: #90a4ae;
   font-size: 1em;
   line-height: 1em;
 }
@@ -274,10 +274,10 @@ blockquote {
 .article-container .highlight figcaption a {
   float: right;
   padding-right: 10px;
-  color: #eff;
+  color: #90a4ae;
 }
 .article-container .highlight figcaption a:hover {
-  border-bottom-color: #eff;
+  border-bottom-color: #90a4ae;
 }
 .article-container .highlight figcaption+table {
   margin-top: 1em;
@@ -291,15 +291,15 @@ blockquote {
 .article-container .highlight .gutter pre {
   padding-right: 0.5rem;
   padding-left: 0.5rem;
-  background-color: #263238;
-  color: #37474f;
+  background-color: #f6f8fa;
+  color: #cfd8dc;
   text-align: right;
 }
 .article-container .highlight .code pre {
   padding-right: 0.5rem;
   padding-left: 0.5rem;
   width: 100%;
-  background-color: #263238;
+  background-color: #f6f8fa;
 }
 .article-container .highlight .line {
   height: 1rem;
@@ -320,20 +320,20 @@ blockquote {
   border: none;
 }
 .article-container pre .deletion {
-  background: #800000;
+  background: #fdd;
 }
 .article-container pre .addition {
-  background: #008000;
+  background: #dfd;
 }
 .article-container pre .meta {
-  color: #c792ea;
+  color: #7c4dff;
 }
 .article-container pre .comment {
-  color: #546e7a;
+  color: rgba(144,164,174,0.565);
 }
 .article-container pre .comment::selection {
-  background: rgba(128,203,196,0.125);
-  color: #eff;
+  background: rgba(128,203,196,0.251);
+  color: #90a4ae;
 }
 .article-container pre .variable,
 .article-container pre .attribute,
@@ -347,7 +347,7 @@ blockquote {
 .article-container pre .tag .name,
 .article-container pre .css .class,
 .article-container pre .css .pseudo {
-  color: #ff5370;
+  color: #e53935;
 }
 .article-container pre .variable::selection,
 .article-container pre .attribute::selection,
@@ -361,15 +361,15 @@ blockquote {
 .article-container pre .tag .name::selection,
 .article-container pre .css .class::selection,
 .article-container pre .css .pseudo::selection {
-  background: rgba(128,203,196,0.125);
-  color: #eff;
+  background: rgba(128,203,196,0.251);
+  color: #90a4ae;
 }
 .article-container pre .tag {
-  color: #89ddff;
+  color: #39adb5;
 }
 .article-container pre .tag::selection {
-  background: rgba(128,203,196,0.125);
-  color: #eff;
+  background: rgba(128,203,196,0.251);
+  color: #90a4ae;
 }
 .article-container pre .number,
 .article-container pre .preprocessor,
@@ -377,7 +377,7 @@ blockquote {
 .article-container pre .params,
 .article-container pre .constant,
 .article-container pre .command {
-  color: #f78c6c;
+  color: #f76d47;
 }
 .article-container pre .number::selection,
 .article-container pre .preprocessor::selection,
@@ -385,15 +385,15 @@ blockquote {
 .article-container pre .params::selection,
 .article-container pre .constant::selection,
 .article-container pre .command::selection {
-  background: rgba(128,203,196,0.125);
-  color: #eff;
+  background: rgba(128,203,196,0.251);
+  color: #90a4ae;
 }
 .article-container pre .built_in {
-  color: #ffcb6b;
+  color: #ffb62c;
 }
 .article-container pre .built_in::selection {
-  background: rgba(128,203,196,0.125);
-  color: #eff;
+  background: rgba(128,203,196,0.251);
+  color: #90a4ae;
 }
 .article-container pre .ruby .class .title,
 .article-container pre .css .rules .attribute,
@@ -406,7 +406,7 @@ blockquote {
 .article-container pre .special,
 .article-container pre .number,
 .article-container pre .formula {
-  color: #c3e88d;
+  color: #91b859;
 }
 .article-container pre .ruby .class .title::selection,
 .article-container pre .css .rules .attribute::selection,
@@ -419,19 +419,19 @@ blockquote {
 .article-container pre .special::selection,
 .article-container pre .number::selection,
 .article-container pre .formula::selection {
-  background: rgba(128,203,196,0.125);
-  color: #eff;
+  background: rgba(128,203,196,0.251);
+  color: #90a4ae;
 }
 .article-container pre .keyword,
 .article-container pre .title,
 .article-container pre .css .hexcolor {
-  color: #89ddff;
+  color: #39adb5;
 }
 .article-container pre .keyword::selection,
 .article-container pre .title::selection,
 .article-container pre .css .hexcolor::selection {
-  background: rgba(128,203,196,0.125);
-  color: #eff;
+  background: rgba(128,203,196,0.251);
+  color: #90a4ae;
 }
 .article-container pre .function,
 .article-container pre .python .decorator,
@@ -441,7 +441,7 @@ blockquote {
 .article-container pre .perl .sub,
 .article-container pre .javascript .title,
 .article-container pre .coffeescript .title {
-  color: #82aaff;
+  color: #6182b8;
 }
 .article-container pre .function::selection,
 .article-container pre .python .decorator::selection,
@@ -451,17 +451,17 @@ blockquote {
 .article-container pre .perl .sub::selection,
 .article-container pre .javascript .title::selection,
 .article-container pre .coffeescript .title::selection {
-  background: rgba(128,203,196,0.125);
-  color: #eff;
+  background: rgba(128,203,196,0.251);
+  color: #90a4ae;
 }
 .article-container pre .tag .attr,
 .article-container pre .javascript .function {
-  color: #c792ea;
+  color: #7c4dff;
 }
 .article-container pre .tag .attr::selection,
 .article-container pre .javascript .function::selection {
-  background: rgba(128,203,196,0.125);
-  color: #eff;
+  background: rgba(128,203,196,0.251);
+  color: #90a4ae;
 }
 #disqus_thread {
   margin-top: 1rem;
@@ -1462,7 +1462,7 @@ a.fancybox:focus {
   z-index: 1;
   display: inline-block;
   padding: 0 0.7rem;
-  color: #eff;
+  color: #90a4ae;
   font-weight: bold;
   font-size: 0.8rem;
   line-height: 1.4rem;
@@ -1472,7 +1472,7 @@ a.fancybox:focus {
   top: 0.4rem;
   right: 10px;
   z-index: 1;
-  color: #89ddff;
+  color: #39adb5;
   cursor: pointer;
   -webkit-transition: color 0.2s;
   -moz-transition: color 0.2s;
@@ -1481,15 +1481,15 @@ a.fancybox:focus {
   transition: color 0.2s;
 }
 .fa-clipboard:hover {
-  color: #3bc6ff;
+  color: #2e8a91;
 }
 .copy-notice {
   position: absolute;
   top: 0;
   right: 0;
   z-index: 1;
-  background: #1c2429;
-  color: #89ddff;
+  background: #e6ebf1;
+  color: #39adb5;
   opacity: 0;
   -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
   filter: alpha(opacity=0);
@@ -1854,27 +1854,26 @@ a.fancybox:focus {
     width: 90%;
   }
 }
-#local-search .local-search-box {
+#algolia-search .ais-search-box {
   margin: 0 auto;
   max-width: 100%;
   width: 100%;
 }
-#local-search .local-search-box input {
+#algolia-search .ais-search-box input {
   padding: 0.25rem 0.7rem;
-  width: 100%;
   outline: none;
   border: 2px solid #49b1f0;
   border-radius: 2rem;
   font-size: 14px;
 }
-#local-search .local-search__hit-item {
+#algolia-search .ais-hits--item.algolia-hit-item {
   position: relative;
   padding-left: 1.5rem;
 }
-#local-search .local-search__hit-item:hover:before {
+#algolia-search .ais-hits--item.algolia-hit-item:hover:before {
   border-color: #ff7242;
 }
-#local-search .local-search__hit-item:before {
+#algolia-search .ais-hits--item.algolia-hit-item:before {
   position: absolute;
   top: 0.4rem;
   left: 0;
@@ -1891,20 +1890,40 @@ a.fancybox:focus {
   -ms-transition: all 0.2s ease-in-out;
   transition: all 0.2s ease-in-out;
 }
-#local-search .local-search__hit-item a {
+#algolia-search .ais-hits--item.algolia-hit-item a {
   display: block;
   color: #4c4948;
   text-decoration: none;
   font-size: 14px;
   cursor: pointer;
 }
-#local-search .local-search__hit-item a:hover {
+#algolia-search .ais-hits--item.algolia-hit-item a:hover {
   color: #49b1f0;
 }
-#local-search .local-search-stats__hr {
-  display: none;
+#algolia-search .ais-pagination.pagination {
+  margin: 0.8rem 0 0 0;
+  padding: 0;
+  text-align: center;
 }
-#local-search .search-result-list {
-  overflow-y: auto;
-  max-height: 10.5rem;
+#algolia-search .ais-pagination.pagination .ais-pagination--item {
+  margin: 0 0.2rem;
+  padding: 0;
+}
+#algolia-search .ais-pagination.pagination .ais-pagination--item a {
+  display: inline-block;
+  min-width: 1.2rem;
+  height: 1.2rem;
+  text-align: center;
+  line-height: 1.2rem;
+}
+#algolia-search .ais-pagination.pagination .ais-pagination--item.current a {
+  background: #00c4b6;
+  color: #fff;
+  text-decoration: none;
+  cursor: default;
+}
+#algolia-search .algolia-logo {
+  padding-top: 2px;
+  width: 4rem;
+  height: 1.5rem;
 }
