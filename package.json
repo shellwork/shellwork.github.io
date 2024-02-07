@@ -13,7 +13,7 @@
   },
   "dependencies": {
     "@upupming/hexo-renderer-markdown-it-plus": "^2.0.2",
-    "hexo": "^6.3.0",
+    "hexo": "^7.1.1",
     "hexo-admonition": "^1.1.2",
     "hexo-algoliasearch": "^2.0.1",
     "hexo-asset-image": "^1.0.0",
