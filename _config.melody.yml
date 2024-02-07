@@ -2,16 +2,31 @@
 # Theme color for customize
 # Notice: color value must in double quotes like "#000" or may cause error!
 # ---------------
+# original color theme
+# theme_color:
+#   enable: true
+#   main: "#49B1F0"
+#   paginator: "#00C4B6"
+#   button_hover: "#FF7242"
+#   text_selection: "#00C4B6"
+#   link_color: "#858585"
+#   hr_color: "#A4D8FA"
+#   tag_start_color: "#A4D8FA"
+#   tag_end_color: "#1B9EF3"
+#   header_text_color: "#EEEEEE"
+#   footer_text_color: "#EEEEEE"
+
 theme_color:
   enable: true
-  main: "#164863"
-  paginator: "#427D9D"
-  button_hover: "#DDF2FD"
-  text_selection: "#DDF2FD"
-  link_color: "#858585"
-  hr_color: "#9BBEC8"
-  tag_start_color: "#9BBEC8"
-  tag_end_color: "#164863"
+  main: "#27374D"
+  paginator: "#164863"
+  button_hover: "#164863"
+  text_selection: "#9DB2BF"
+  link_color: "#526D82"
+  hr_color: "#27374D"
+  meta_color: "#526D82"
+  tag_start_color: "#27374D"
+  tag_end_color: "#526D82"
   header_text_color: "#EEEEEE"
   footer_text_color: "#EEEEEE"
 
@@ -47,7 +62,7 @@ pwa:
 
 # Highlight theme
 # ---------------
-highlight_theme: light
+highlight_theme: pale night
 
 # code_word_wrap: true or false
 
@@ -234,13 +249,13 @@ disqus:
 # client_id:
 # client_secret:
 
-# gitalk:
-#   enable: false
-#   client_id:
-#   client_secret:
-#   repo:
-#   owner:
-#   admin:
+gitalk:
+  enable: true
+  client_id: e5a43a9bcca6b5f65db2
+  client_secret: 6db80e0cee303f72ef753ee4ebdc0f601dfcbb3e
+  repo: shellwork_blog_comment
+  owner: shellwork
+  admin: shellwork
 
 # valine comment system. https://valine.js.org
 # valine:
