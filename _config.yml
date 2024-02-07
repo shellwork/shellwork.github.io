@@ -5,7 +5,7 @@
 # Site
 title: Baiding Chen's blog
 subtitle: 'Fight for what I love!'
-description: 'A Bioinformatics student who loves BME more!'
+description: 'A Bioinformatics student from XJTLU'
 keywords: 
 # pay attention!
 author: Baiding Chen
@@ -99,7 +99,7 @@ ignore:
 plugins:
   - hexo-algoliasearch
 ## Themes: https://hexo.io/themes/
-theme: melody
+theme: butterfly
 
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
