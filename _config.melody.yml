@@ -65,7 +65,7 @@ social:
 algolia_search:
   enable: true
   hits:
-    per_page: 8
+    per_page: 10
   languages:
     input_placeholder: Search for post
     hits_empty: "We didn't find any results for the search: ${query}"

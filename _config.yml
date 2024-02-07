@@ -106,7 +106,7 @@ theme: melody
 deploy:
   type: git
   repository: https://github.com/shellwork/shellwork.github.io.git  #你的仓库地址
-  branch: main
+  branch: pages
 
 markdown_it_plus:
   plugins:
@@ -121,14 +121,15 @@ algolia:
   apiKey: "cc1a1ff7c83560e47569aacc3c82bc15"
   adminApiKey: "d0e49f0537636075df1cd842a4bedd26"
   chunkSize: 5000
-  indexName: "hexo_blog_search"
+  indexName: hexo_blog_search
   fields:
-    - content:strip:truncate,0,500
+    - content:strip:truncate,0,60
     - excerpt:strip
     - gallery
     - permalink
     - photos
     - slug
     - tags
+    - categories
     - title
 

@@ -19,28 +19,39 @@ const search = instantsearch({
 const virtualSearchBox = instantsearch.connectors.connectSearchBox(() => {});
 
 search.addWidgets([
-  virtualSearchBox({}),
   instantsearch.widgets.hits({
     container: '#hits',
-  }),
-  instantsearch.widgets.configure({
-    hitsPerPage: 8,
-  }),
-  instantsearch.widgets.dynamicWidgets({
-    container: '#dynamic-widgets',
-    fallbackWidget({ container, attribute }) {
-      return instantsearch.widgets.panel({ templates: { header: () => attribute } })(
-        instantsearch.widgets.refinementList
-      )({
-        container,
-        attribute,
-      });
+    templates: {
+      item: (hit, { html, components }) => html`
+        <div>
+          <img src="${hit.image}" align="left" alt="${hit.name}" />
+          <div class="hit-name">
+            ${components.Highlight({ hit, attribute: 'name' })}
+          </div>
+          <div class="hit-description">
+            ${components.Highlight({ hit, attribute: 'description' })}
+          </div>
+          <div class="hit-price">$${hit.price}</div>
+        </div>
+      `,
     },
-    widgets: [
-    ],
+  })
+]);
+
+
+// Before `search.start()`
+search.addWidgets([
+  instantsearch.widgets.clearRefinements({
+    container: '#clear-refinements',
   }),
-  instantsearch.widgets.pagination({
-    container: '#pagination',
+
+  instantsearch.widgets.refinementList({
+    container: '#brand-list',
+    attribute: 'brand',
+  }),
+
+  instantsearch.widgets.configure({
+    hitsPerPage: 8
   }),
 ]);
 
@@ -118,3 +129,4 @@ function isModifierEvent(event) {
     event.shiftKey
   );
 }
+
