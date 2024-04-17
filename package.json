@@ -14,7 +14,7 @@
   "dependencies": {
     "@upupming/hexo-renderer-markdown-it-plus": "^2.0.2",
     "gitalk": "^1.8.0",
-    "hexo": "^7.1.1",
+    "hexo": "^7.2.0",
     "hexo-admonition": "^1.1.2",
     "hexo-algoliasearch": "^2.0.1",
     "hexo-asset-image": "^1.0.0",
