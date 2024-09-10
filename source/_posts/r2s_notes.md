@@ -44,7 +44,7 @@ tags: ICT, Technology
 3. UA信息修改：防止光猫检测到内网多个设备共享
 
 本教程中，宿舍组网方案的网络结构拓扑图如下
-![](image.png)
+![](image.jpg)
 > 图来自[HuiHuBuTong](https://github.com/TianxinZhao/HuiHuBuTong)
 
 ## 3. 逐步教程
@@ -70,10 +70,10 @@ tags: ICT, Technology
 **通过ssh登录**
 1. 使用 `MobaXterm` 或其他 SSH 客户端连接到 r2s 软路由（默认 IP 地址为你刚刚配置`192.168.100.1`）。
 2. 使用默认的用户名(root)和密码(password)登录到软路由。正确登录进去之后如下
-![ssh登录界面](image-2.png)
+![ssh登录界面](image-2.jpg)
 
 **或者通过浏览器直接登录**
-1.正常配置之后输入网址，即你配置好的（192.168.100.1），等待响应后你能看到这个页面![软路由后台登录界面](image-1.png)
+1.正常配置之后输入网址，即你配置好的（192.168.100.1），等待响应后你能看到这个页面![软路由后台登录界面](image-1.jpg)
 
 ### Part2: 修改硬件连接方式
 
@@ -94,7 +94,7 @@ tags: ICT, Technology
 
 #### 修改软件源和自定义`DNS`（不是必须）
 点击首页DNS按钮，选择自定义DNS，键入任意能够正常稳定服务的DNS即可，如：8.8.8.8/8.8.4.4
-![DNS配置](image-14.png)
+![DNS配置](image-14.jpg)
 点击首页软件源按钮，可以在opkg连接不上时更换有响应的国内节点，一般节点都没啥问题，这个系统偶尔会因为未知原因连接不上opkg软件库
 
 #### `MAC`地址克隆
@@ -106,18 +106,18 @@ tags: ICT, Technology
 **查找已认证设备的MAC地址**
 1. 把任意一台设备直接连接到光猫，wifi/有线均可。wifi可以用ap模式的路由器直接连接在光猫上实现
 2. 点击打开wifi设置，找到网络属性（这里以学校网络情况为例），点开翻到最下面找到物理地址（MAC）并记录
-![WIFI设置](image-7.png)
-![MAC地址](image-8.png)
+![WIFI设置](image-7.jpg)
+![MAC地址](image-8.jpg)
 
 **修改光猫接入WAN口的MAC地址**
 1. 打开iStoreOS后台管理员页面，并登录
-![登录后台](image-3.png)
+![登录后台](image-3.jpg)
 2.点击左边侧边栏-> 网络 -> 接口
-![找到网络接口配置](image-4.png)
+![找到网络接口配置](image-4.jpg)
 1. 找到WAN口点击编辑,注意对应接口是eth0还是eth1，在作者这里是eth0
-![选择Wan口打开配置](image-5.png)
+![选择Wan口打开配置](image-5.jpg)
 1. 修改Wan口对应的MAC地址为刚刚记录的地址，修改后选择保存并应用
-![修改Mac地址](image-6.png)
+![修改Mac地址](image-6.jpg)
 
 #### 修改 `TTL` 值
 
@@ -134,9 +134,9 @@ tags: ICT, Technology
 - **方案1：**
    **istoreOS管理员界面设置**
    找到网络 -> 防火墙 选择自定义规则，直接粘贴代码，点右下角保存，接着重启防火墙
-   ![配置防火墙](image-9.png)
-   ![配置防火墙](image-10.png)
-   ![配置防火墙](image-11.png)
+   ![配置防火墙](image-9.jpg)
+   ![配置防火墙](image-10.jpg)
+   ![配置防火墙](image-11.jpg)
 
 - **方案2：**
 **命令行添加**
@@ -164,10 +164,10 @@ tags: ICT, Technology
 - **方案1：**
    **Release页面下载Ua3f**
    访问ua3f [release下载页面](https://github.com/SunBK201/UA3F/releases) 选择你的硬件架构，不同架构使用的软件包不一样，笔者这里使用的是软路由r2s软路由架构为arm64。
-   ![下载Ua3f](image-12.png)
+   ![下载Ua3f](image-12.jpg)
    使用scp或者ssh客户端将下载下来的`.ipk`文件传给路由器
    或者使用网页端上传：选择系统 -> 文件传输
-   ![上传界面](image-13.png)
+   ![上传界面](image-13.jpg)
 
    **安装Ua3f的依赖软件**
    紧接Release页面下载方案
@@ -190,7 +190,7 @@ tags: ICT, Technology
 1. 启动 `UA3F` 服务并配置自定义 `User-Agent`：
 - **方案1：**
   正确安装 `Ua3f` 软件后刷新管理员页面，在服务一栏会出现该选项卡，如图所示
-  ![Ua3f插件页面](image-15.png)
+  ![Ua3f插件页面](image-15.jpg)
   勾选enabled启动服务，`User-Agent`自己随意改，默认FFF，其他不修改。点右下角保存并应用即可
 - **方案2：**
   习惯命令行的同学直接参考 [Ua3f说明文档](https://github.com/SunBK201/UA3F#%E4%BD%9C%E4%B8%BA%E5%90%8E%E5%8F%B0%E6%9C%8D%E5%8A%A1%E8%BF%90%E8%A1%8C)
@@ -205,7 +205,7 @@ tags: ICT, Technology
 - 如果出现shellclash/openclash内核自动下载错误，参考文档：[手动安装内核](https://juewuy.github.io/bdaz/)
 
 - 在选择 `导入外部配置文件链接`步骤时，建议改为 `本地上传完整配置文件`。
-![shellclash命令行](image-16.png)
+![shellclash命令行](image-16.jpg)
 - 自行手动下载写好的yaml配置文件上传到路径`/tmp/`。这里给到作者提供的clash代理配置（作者的cdn需要梯子才能快速访问）
 - 一共有三种配置，这里只列举了不带科学上网的版本，[详情访问](https://github.com/SunBK201/UA3F?tab=readme-ov-file#clash-%E5%8F%82%E8%80%83%E9%85%8D%E7%BD%AE)
 ```yaml
@@ -249,7 +249,7 @@ parsers:
 
 1. 部署过程中建议按照笔者顺序进行来修改，中途可能被光猫检测到路由器而出现封号情况（1分钟），系正常情况，自行灵活应对。建议在部署过程中，全程不要有任何第二个设备接入局域网，只有已经认证的电脑接入。
 2. 安装完成后，主要测试能否正常上网，可以使用网络测速等在线工具。
-3. 多尝试使用网页里查看防火墙的配置是否正常运行，是否有流量经过。![防火墙配置监控](image-17.png)
+3. 多尝试使用网页里查看防火墙的配置是否正常运行，是否有流量经过。![防火墙配置监控](image-17.jpg)
 4. 多多检查日志是否有报错信息，[info]和[warning]都可以忽略
 5. 如果遇到添加防火墙配置过程中，访问管理员页面被服务器拒绝的情况。可以采取如下措施来暂时恢复访问：
    1. 登录ssh或者浏览器访问http://192.168.100.1:7681/
