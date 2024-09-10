@@ -3502,16 +3502,9 @@ h1.page-title + .tag-cloud-list {
 }
 #page-header #post-info {
   position: absolute;
-  bottom: 100px;
+  bottom: 30px;
   padding: 0 8%;
   width: 100%;
-  text-align: center;
-}
-@media screen and (max-width: 900px) {
-  #page-header #post-info {
-    bottom: 30px;
-    text-align: left;
-  }
 }
 @media screen and (max-width: 768px) {
   #page-header #post-info {
@@ -6376,20 +6369,16 @@ blockquote.pullquote.right {
   color: #49b1f5;
 }
 #algolia-search .search-dialog .ais-Hits-list mark {
-  background: #ff9; /* 柔和的黄色背景 */
-  color: #333; /* 深灰色文字 */
+  background: transparent;
+  color: #f47466;
   font-weight: bold;
-  padding: 0 2px; /* 添加一些内边距 */
 }
 #algolia-search .search-dialog .algolia-hits-item-title {
   font-weight: 600;
-  margin-bottom: 4px; /* 确保标题和内容之间有适当的间距 */
 }
 #algolia-search .search-dialog .algolia-hit-item-content {
   margin: 0 0 8px;
   word-break: break-word;
-  font-size: 0.9em; /* 调整内容字体大小为稍小 */
-  color: #666; /* 深灰色文字，确保和标题有所区分 */
 }
 #algolia-search .search-dialog .ais-Pagination {
   margin: 15px 0 0;
@@ -6436,10 +6425,10 @@ blockquote.pullquote.right {
 #algolia-search .search-dialog #algolia-info div {
   display: inline;
 }
-#algolia-search .search-dialog .algolia-poweredBy {
+#algolia-search .search-dialog #algolia-info .algolia-poweredBy {
   float: right;
   vertical-align: text-top;
 }
-#algolia-search .search-dialog .algolia-poweredBy svg {
+#algolia-search .search-dialog #algolia-info .algolia-poweredBy svg {
   height: 1.1em;
 }
