@@ -136,7 +136,7 @@ custom_text: Momo misses Caca every day!
 comments:
   # Up to two comments system, the first will be shown as default
   # Choose: Disqus/Disqusjs/Livere/Gitalk/Valine/Waline/Utterances/Facebook Comments/Twikoo
-  use: Gitalk
+  use: Disqus
   text: true # Display the comment name next to the button
   # lazyload: The comment system will be load when comment element enters the browser's viewport.
   # If you set it to true, the comment count will be invalid
@@ -367,13 +367,13 @@ sharejs:
   enable: false
   sites: facebook,twitter,wechat,weibo,qq  #想要显示的内容
 
-gitalk:
-  client_id: e5a43a9bcca6b5f65db2
-  client_secret: 1988ce329b81d149884c96915eca317ae6923208
-  repo: shellwork_blog_comment
-  owner: shellwork
-  admin: shellwork
-  option:
+# gitalk:
+#   client_id: e5a43a9bcca6b5f65db2
+#   client_secret: 1988ce329b81d149884c96915eca317ae6923208
+#   repo: shellwork_blog_comment
+#   owner: shellwork
+#   admin: shellwork
+#   option:
 
 # Chat Button [recommend]
 # It will create a button in the bottom right corner of website, and hide the origin button
