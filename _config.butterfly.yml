@@ -369,7 +369,7 @@ sharejs:
 
 gitalk:
   client_id: e5a43a9bcca6b5f65db2
-  client_secret: 6db80e0cee303f72ef753ee4ebdc0f601dfcbb3e
+  client_secret: 1988ce329b81d149884c96915eca317ae6923208
   repo: shellwork_blog_comment
   owner: shellwork
   admin: shellwork

@@ -117,9 +117,9 @@ markdown_it_plus:
         strict: false
 
 algolia:
-  appId: "RAYWM9EI3X"
-  apiKey: "cc1a1ff7c83560e47569aacc3c82bc15"
-  adminApiKey: "d0e49f0537636075df1cd842a4bedd26"
+  appId: "ATGW7EDZZW"
+  apiKey: "e716fed39a1ce4b08fb539b6938f73e0"
+  adminApiKey: "eb5227980a050447b1caeb038623fd18"
   chunkSize: 5000
   indexName: hexo_blog_search
   fields:
