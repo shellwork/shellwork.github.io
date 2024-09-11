@@ -212,7 +212,7 @@ document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-
 
     content = content.replace(/<img.*?src="(.*?)"?[^\>]+>/ig, '[image]') // replace image link
     content = content.replace(/<a[^>]+?href=["']?([^"']+)["']?[^>]*>([^<]+)<\/a>/gi, '[link]') // replace url
-    content = content.replace(/<pre><code>.*?<\/pre>/gi, '[code]') // replace code
+    content = content.replace(/<code>.*?<\/code>/gi, '[code]') // replace code
     content = content.replace(/<[^>]+>/g,"") // remove html tag
 
     if (content.length > 150) {
@@ -221,51 +221,22 @@ document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-
     return content
   }
 
-  const findTrueUrl = (array) => {
-    Promise.all(array.map(item =>
-      fetch(item.url).then(resp => resp.json()).then(data => {
-        let urlArray = data.body ? data.body.match(/(https?:\/\/)?([\da-z\.-]+)\.([a-z\.]{2,6})([\/\w \.-]*)*\/?/ig) : []
-        if (!Array.isArray(urlArray) || urlArray.length === 0) {
-          urlArray = [`${data.html_url}`]
-        }
-        if (data.user.login === 'utterances-bot') {
-          return urlArray.pop()
-        } else {
-          return urlArray.shift()
-        }
-      })
-    )).then(res => {
-        array = array.map((i,index)=> {
-          return {
-            ...i,
-            url: res[index]
-          }
-        })
-
-        saveToLocal.set('github-newest-comments', JSON.stringify(array), 10/(60*24))
-        generateHtml(array)
-    });
-  }
-
   const getComment = () => {
-    fetch('https://api.github.com/repos/shellwork/shellwork_blog_comment/issues/comments?sort=updated&direction=desc&per_page=6&page=1',{
-      "headers": {
-        Accept: 'application/vnd.github.v3.html+json'
-      }
-    })
+    fetch('https://disqus.com/api/3.0/forums/listPosts.json?forum=&related=thread&limit=6&api_key=')
       .then(response => response.json())
       .then(data => {
-        const githubArray = data.map(item => {
+        const disqusArray = data.response.map(item => {
           return {
-            'avatar': item.user.avatar_url,
-            'content': changeContent(item.body_html || item.body),
-            'nick': item.user.login,
-            'url': item.issue_url,
-            'date': item.updated_at,
-            'githubUrl': item.html_url
+            'avatar': item.author.avatar.cache,
+            'content': changeContent(item.message),
+            'nick': item.author.name,
+            'url': item.url,
+            'date': item.createdAt
           }
         })
-        findTrueUrl(githubArray)
+
+        saveToLocal.set('disqus-newest-comments', JSON.stringify(disqusArray), 10/(60*24))
+        generateHtml(disqusArray)
       }).catch(e => {
         const $dom = document.querySelector('#card-newest-comments .aside-list')
         $dom.textContent= "Unable to retrieve comments, please check the configuration"
@@ -283,10 +254,10 @@ document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-
           const name = 'src'
           result += `<a href='${array[i].url}' class='thumbnail'><img ${name}='${array[i].avatar}' alt='${array[i].nick}'></a>`
         }
-
+        
         result += `<div class='content'>
         <a class='comment' href='${array[i].url}' title='${array[i].content}'>${array[i].content}</a>
-        <div class='name'><span>${array[i].nick} / </span><time datetime="${array[i].date}">${btf.diffDate(array[i].date, true)}</time></div>
+        <div class='name'><span>${array[i].nick}</span><time> / ${btf.diffDate(array[i].date, true)}</time></div>
         </div></div>`
       }
     } else {
@@ -301,7 +272,7 @@ document.addEventListener('DOMContentLoaded', panguInit)</script><div class="js-
 
   const newestCommentInit = () => {
     if (document.querySelector('#card-newest-comments .aside-list')) {
-      const data = saveToLocal.get('github-newest-comments')
+      const data = saveToLocal.get('disqus-newest-comments')
       if (data) {
         generateHtml(JSON.parse(data))
       } else {
