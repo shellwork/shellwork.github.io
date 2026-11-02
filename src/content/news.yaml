@@ -1,0 +1,23 @@
+# Short updates shown on the home page, newest first after sorting.
+# `text` supports **bold**, *italic*, `code` and [links](https://example.com).
+# `date` can be a full date (2026-10-15) or just a month (2026-10).
+
+- id: n2026-09-osworld
+  date: 2026-09-30
+  text: "[OSWorld-Science](https://arxiv.org/abs/2609.39903) is out on arXiv: a benchmark of computer-use agents on real scientific software. I built its chemistry domain."
+
+- id: n2026-03-advsci
+  date: 2026-03-24
+  text: "Our work on nanoparticle-based manufacturing of engineered exosomes was published in [*Advanced Science*](https://doi.org/10.1002/advs.202516075)."
+
+- id: n2025-08-cmu
+  date: 2025-08
+  text: "Started my M.S. in Automated Science at **Carnegie Mellon University**."
+
+- id: n2025-07-xjtlu
+  date: 2025-07
+  text: "Graduated from Xi'an Jiaotong-Liverpool University with a B.Sc. in Biomedical Statistics."
+
+- id: n2024-10-igem
+  date: 2024-10
+  text: "Our iGEM team won a **Gold Medal** in the AI & Software track with ChatParts."

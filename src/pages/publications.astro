@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PublicationItem from '../components/PublicationItem.astro';
+import { site } from '../site.config';
+import { getPublications } from '../lib/content';
+
+const pubs = await getPublications();
+const years = [...new Set(pubs.map((p) => p.data.year))];
+---
+
+<BaseLayout title="Publications" description={`Publications by ${site.name}.`}>
+  <header class="page-header">
+    <h1>Publications</h1>
+    <p>
+      {pubs.length} papers.
+      {site.links.scholar && <>See also <a href={site.links.scholar} target="_blank" rel="noopener">Google Scholar</a>.</>}
+    </p>
+  </header>
+
+  {
+    years.map((year) => (
+      <section class="section year">
+        <h2 class="section-title">{year}</h2>
+        <ul class="plain">
+          {pubs
+            .filter((p) => p.data.year === year)
+            .map((pub) => (
+              <PublicationItem pub={pub} />
+            ))}
+        </ul>
+      </section>
+    ))
+  }
+</BaseLayout>
+
+<style>
+  .year {
+    margin: 2rem 0;
+  }
+
+  .plain {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+</style>

@@ -1,0 +1,169 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import { cssIdent, formatDate, readingTime, url } from '../lib/utils';
+
+interface Props {
+  post: CollectionEntry<'posts'>;
+  featured?: boolean;
+}
+
+const { post, featured = false } = Astro.props;
+const { data } = post;
+const href = url(`/blog/${post.id}/`);
+const vt = cssIdent(post.id);
+---
+
+<article
+  class:list={['post-card', 'lift', { featured, 'has-cover': data.cover }]}
+  data-reveal
+  data-tags={data.tags.join('|')}
+>
+  {
+    data.cover && (
+      <a class="cover" href={href} tabindex="-1" aria-hidden="true">
+        <Image
+          src={data.cover}
+          alt=""
+          widths={featured ? [600, 1000] : [400, 700]}
+          sizes={featured ? '(min-width: 760px) 480px, 100vw' : '(min-width: 760px) 360px, 100vw'}
+          style={`view-transition-name: post-cover-${vt}`}
+        />
+      </a>
+    )
+  }
+  <div class="body">
+    <div class="meta faint">
+      <time datetime={data.date.toISOString()}>{formatDate(data.date, 'short')}</time>
+      <span>· {readingTime(post.body)} min read</span>
+      {data.draft && <strong class="draft">· Draft</strong>}
+    </div>
+    <h2>
+      <a href={href} style={`view-transition-name: post-title-${vt}`}>{data.title}</a>
+    </h2>
+    {data.description && <p class="muted">{data.description}</p>}
+    {
+      data.tags.length > 0 && (
+        <ul class="tags">
+          {data.tags.map((t) => (
+            <li class="tag">#{t}</li>
+          ))}
+        </ul>
+      )
+    }
+  </div>
+</article>
+
+<style>
+  .post-card {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid var(--border);
+    border-radius: 14px;
+    background: var(--bg-elev);
+    overflow: hidden;
+  }
+
+  .cover {
+    display: block;
+    overflow: hidden;
+    aspect-ratio: 16 / 9;
+  }
+
+  .cover img {
+    display: block;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: scale 0.6s var(--ease-out);
+  }
+
+  .post-card:hover .cover img {
+    scale: 1.05;
+  }
+
+  .body {
+    display: flex;
+    flex-direction: column;
+    gap: 0.45rem;
+    padding: 1.1rem 1.25rem 1.25rem;
+    flex: 1;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+    font-size: 0.8rem;
+  }
+
+  h2 {
+    font-size: 1.15rem;
+    margin: 0;
+  }
+
+  h2 a {
+    color: var(--text);
+  }
+
+  /* The whole card is clickable through the title link. */
+  h2 a::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+  }
+
+  h2 a:hover {
+    text-decoration: none;
+  }
+
+  .post-card:hover h2 a {
+    color: var(--accent);
+  }
+
+  p {
+    margin: 0;
+    font-size: 0.93rem;
+  }
+
+  .tags {
+    margin-top: auto;
+    padding-top: 0.3rem;
+  }
+
+  .draft {
+    color: var(--highlight);
+  }
+
+  @media (min-width: 760px) {
+    .featured.has-cover {
+      display: grid;
+      grid-template-columns: 1.15fr 1fr;
+    }
+
+    .featured .cover {
+      aspect-ratio: auto;
+      min-height: 260px;
+    }
+
+    .featured .body {
+      justify-content: center;
+      padding: 1.75rem 2rem;
+    }
+
+    .featured h2 {
+      font-family: var(--font-serif);
+      font-size: 1.6rem;
+      line-height: 1.2;
+    }
+
+    .featured p {
+      font-size: 1rem;
+    }
+
+    .featured .tags {
+      margin-top: 0.4rem;
+    }
+  }
+</style>

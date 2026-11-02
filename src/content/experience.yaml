@@ -1,0 +1,66 @@
+# Education and research experience, shown on the CV page and the home page.
+# `kind` is one of: education, research, industry, teaching, service.
+# Leave `end` out for ongoing positions.
+
+- id: cmu-ms
+  kind: education
+  org: School of Computer Science, Carnegie Mellon University
+  orgUrl: https://www.cs.cmu.edu
+  role: M.S. in Automated Science
+  location: Pittsburgh, PA
+  start: 2025-08
+  details:
+    - "Core courses: Computational Biology, Biology Laboratory Automation, Deep Learning, Bioinformatics"
+
+- id: xjtlu-bsc
+  kind: education
+  org: School of Mathematics and Physics, Xi'an Jiaotong-Liverpool University
+  orgUrl: https://www.xjtlu.edu.cn/en
+  role: B.Sc. in Biomedical Statistics
+  location: Suzhou, China
+  start: 2021-09
+  end: 2025-07
+  details:
+    - "Core courses: Machine Learning, Statistics, Mathematical Modeling, Data Analysis, Python & R Programming"
+
+- id: cmu-autobiolab
+  kind: research
+  org: Carnegie Mellon University
+  role: Graduate Researcher, AutoBioLab
+  location: Pittsburgh, PA
+  start: 2025-10
+  advisor: Prof. Min Xu and Prof. Rebecca E. Taylor
+  details:
+    - "Multi-agent LLM system that plans, verifies and runs biology experiments on liquid handlers, with real-time monitoring and failure recovery."
+
+- id: neu-osworld
+  kind: research
+  org: Northeastern University (remote)
+  role: Research Assistant, OSWorld-Science
+  start: 2026-07
+  end: 2026-09
+  advisor: Dr. Tianyu Liu (Alibaba US) and Prof. Wengong Jin
+  details:
+    - "Built the chemistry task set (43 tasks, the benchmark's largest domain) with automatic RDKit graders, and evaluated frontier computer-use agents."
+
+- id: cmu-cryopass
+  kind: research
+  org: Carnegie Mellon University
+  role: Research Assistant, CryoPASS
+  location: Pittsburgh, PA
+  start: 2025-10
+  end: 2026-07
+  advisor: Prof. Min Xu
+  details:
+    - "Collapse-free unsupervised domain adaptation for 3D protein segmentation in cryo-ET, from simulated to real tomograms."
+
+- id: xjtlu-deepmerip
+  kind: research
+  org: Xi'an Jiaotong-Liverpool University
+  role: Undergraduate Researcher, DeepMerip
+  location: Suzhou, China
+  start: 2023-02
+  end: 2023-05
+  advisor: Prof. Zhen Wei
+  details:
+    - "CNN-based multi-task framework for denoising low-depth MeRIP-seq data and calling m6A peaks."

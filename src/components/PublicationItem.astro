@@ -1,0 +1,353 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import { isSelf, linkLabels, url } from '../lib/utils';
+
+interface Props {
+  pub: CollectionEntry<'publications'>;
+}
+
+const { pub } = Astro.props;
+const { id, data } = pub;
+const linkEntries = Object.entries(data.links).filter(([, href]) => href);
+const badge = data.venueShort ?? String(data.year);
+---
+
+<li class="pub" id={id} data-reveal>
+  <div class="thumb-col">
+    {
+      data.image ? (
+        <button type="button" class="thumb" aria-label={`Enlarge figure: ${data.title}`} data-dialog={`fig-${id}`}>
+          <Image src={data.image} alt="" widths={[240, 480]} sizes="220px" />
+        </button>
+      ) : (
+        <div class:list={['thumb', 'thumb-empty', data.type]} aria-hidden="true">
+          <span>{badge}</span>
+        </div>
+      )
+    }
+  </div>
+  <div class="body">
+    <div class="labels">
+      <span class:list={['venue-badge', data.type]}>{badge}</span>
+      {data.award && <span class="award">{data.award}</span>}
+    </div>
+    <div class="title">{data.title}</div>
+    <div class="authors">
+      {
+        data.authors.map((a, i) => (
+          <>
+            {isSelf(a) ? <strong class="self">{a}</strong> : <span>{a}</span>}
+            {i < data.authors.length - 1 && ', '}
+          </>
+        ))
+      }
+    </div>
+    <div class="venue">
+      <em>{data.venue}</em>, {data.year}
+    </div>
+    {data.equalContribution && <div class="note faint">* Equal contribution</div>}
+    {
+      (linkEntries.length > 0 || data.bibtex || data.project) && (
+        <div class="pill-links">
+          {linkEntries.map(([key, href]) => (
+            <a href={href} target="_blank" rel="noopener">
+              {linkLabels[key] ?? key}
+            </a>
+          ))}
+          {data.project && <a href={url(`/projects/${data.project}/`)}>Details</a>}
+          {data.bibtex && (
+            <button type="button" class="bib-toggle" aria-expanded="false" aria-controls={`bib-${id}`}>
+              BibTeX
+            </button>
+          )}
+        </div>
+      )
+    }
+    {
+      data.bibtex && (
+        <div class="bib" id={`bib-${id}`} hidden>
+          <pre><code>{data.bibtex.trim()}</code></pre>
+          <button type="button" class="bib-copy">Copy</button>
+        </div>
+      )
+    }
+  </div>
+  {
+    data.image && (
+      <dialog class="figure-dialog" id={`fig-${id}`}>
+        <figure>
+          <Image src={data.image} alt={`Main figure of “${data.title}”`} widths={[960, 1600]} sizes="min(92vw, 1100px)" loading="lazy" />
+          <figcaption>{data.title}</figcaption>
+        </figure>
+        <form method="dialog">
+          <button class="close" aria-label="Close">×</button>
+        </form>
+      </dialog>
+    )
+  }
+</li>
+
+<script>
+  document.querySelectorAll<HTMLButtonElement>('.thumb[data-dialog]').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      document.getElementById(btn.dataset.dialog ?? '')?.querySelector('img')?.setAttribute('loading', 'eager');
+      (document.getElementById(btn.dataset.dialog ?? '') as HTMLDialogElement | null)?.showModal();
+    });
+  });
+
+  // Close the figure dialog when clicking the backdrop.
+  document.querySelectorAll<HTMLDialogElement>('.figure-dialog').forEach((dialog) => {
+    dialog.addEventListener('click', (e) => {
+      if (e.target === dialog) dialog.close();
+    });
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.bib-toggle').forEach((btn) => {
+    btn.addEventListener('click', () => {
+      const box = document.getElementById(btn.getAttribute('aria-controls') ?? '');
+      if (!box) return;
+      box.hidden = !box.hidden;
+      btn.setAttribute('aria-expanded', String(!box.hidden));
+    });
+  });
+
+  document.querySelectorAll<HTMLButtonElement>('.bib-copy').forEach((btn) => {
+    btn.addEventListener('click', async () => {
+      const text = btn.parentElement?.querySelector('code')?.textContent ?? '';
+      try {
+        await navigator.clipboard.writeText(text);
+        btn.textContent = 'Copied';
+      } catch {
+        btn.textContent = 'Copy failed';
+      }
+      setTimeout(() => (btn.textContent = 'Copy'), 1500);
+    });
+  });
+</script>
+
+<style>
+  .pub {
+    display: grid;
+    grid-template-columns: 220px 1fr;
+    gap: 1.4rem;
+    padding: 1.25rem 0;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .pub:last-child {
+    border-bottom: 0;
+  }
+
+  /* Paper figures are usually drawn on white, so the frame stays white in dark mode too. */
+  .thumb {
+    display: grid;
+    place-items: center;
+    width: 100%;
+    aspect-ratio: 16 / 10;
+    padding: 0.4rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: #fff;
+    overflow: hidden;
+  }
+
+  button.thumb {
+    cursor: zoom-in;
+    transition:
+      border-color 0.15s,
+      box-shadow 0.15s;
+  }
+
+  button.thumb:hover,
+  button.thumb:focus-visible {
+    border-color: var(--accent);
+    box-shadow: 0 4px 16px rgb(0 0 0 / 0.08);
+  }
+
+  .thumb img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    transition: transform 0.25s;
+  }
+
+  button.thumb:hover img {
+    transform: scale(1.03);
+  }
+
+  :global(:root[data-theme='dark']) .thumb {
+    border-color: transparent;
+  }
+
+  .thumb-empty {
+    background: linear-gradient(135deg, var(--accent-soft), var(--bg-subtle));
+  }
+
+  :global(:root[data-theme='dark']) .thumb-empty {
+    border-color: var(--border);
+  }
+
+  .thumb-empty span {
+    font-family: var(--font-serif);
+    font-size: 1.25rem;
+    font-weight: 600;
+    color: var(--accent);
+    text-align: center;
+    padding: 0 0.75rem;
+  }
+
+  .thumb-empty.preprint span,
+  .thumb-empty.workshop span,
+  .thumb-empty.other span {
+    color: var(--text-muted);
+  }
+
+  .labels {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem;
+    margin-bottom: 0.35rem;
+  }
+
+  .venue-badge {
+    display: inline-block;
+    font-size: 0.74rem;
+    font-weight: 600;
+    line-height: 1.3;
+    padding: 0.2rem 0.5rem;
+    border-radius: 6px;
+    background: var(--accent-soft);
+    color: var(--accent);
+  }
+
+  .venue-badge.preprint,
+  .venue-badge.workshop,
+  .venue-badge.other {
+    background: var(--bg-subtle);
+    color: var(--text-muted);
+  }
+
+  .title {
+    font-weight: 600;
+    line-height: 1.4;
+  }
+
+  .figure-dialog {
+    width: min(92vw, 1100px);
+    max-height: 92vh;
+    padding: 0;
+    border: 0;
+    border-radius: var(--radius);
+    background: #fff;
+    color: #1d1f21;
+  }
+
+  .figure-dialog::backdrop {
+    background: rgb(0 0 0 / 0.7);
+  }
+
+  .figure-dialog figure {
+    margin: 0;
+    padding: 1.25rem 1.25rem 1rem;
+  }
+
+  .figure-dialog img {
+    display: block;
+    width: 100%;
+    max-height: calc(92vh - 6rem);
+    object-fit: contain;
+  }
+
+  .figure-dialog figcaption {
+    margin-top: 0.75rem;
+    font-size: 0.9rem;
+    color: #5d6166;
+    text-align: center;
+  }
+
+  .figure-dialog .close {
+    position: absolute;
+    top: 0.4rem;
+    right: 0.5rem;
+    width: 2rem;
+    height: 2rem;
+    border: 0;
+    border-radius: 50%;
+    background: rgb(0 0 0 / 0.06);
+    color: #333;
+    font-size: 1.3rem;
+    line-height: 1;
+    cursor: pointer;
+  }
+
+  .authors {
+    font-size: 0.93rem;
+    color: var(--text-muted);
+    margin-top: 0.2rem;
+  }
+
+  .self {
+    color: var(--text);
+    text-decoration: underline;
+    text-decoration-color: var(--text-faint);
+    text-underline-offset: 3px;
+  }
+
+  .venue {
+    font-size: 0.93rem;
+    color: var(--text-muted);
+  }
+
+  .award {
+    font-size: 0.78rem;
+    font-weight: 600;
+    color: var(--highlight);
+  }
+
+  .note {
+    font-size: 0.8rem;
+  }
+
+  .pill-links {
+    margin-top: 0.5rem;
+  }
+
+  .bib {
+    position: relative;
+    margin-top: 0.6rem;
+  }
+
+  .bib pre {
+    margin: 0;
+    font-size: 0.78rem;
+    background: var(--code-bg);
+  }
+
+  .bib-copy {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    font: inherit;
+    font-size: 0.74rem;
+    padding: 0.1rem 0.5rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg-elev);
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+
+  @media (max-width: 560px) {
+    .pub {
+      grid-template-columns: 1fr;
+      gap: 0.8rem;
+    }
+
+    /* Without a figure the tile only repeats the venue badge, so drop it on phones. */
+    .thumb-col:has(.thumb-empty) {
+      display: none;
+    }
+  }
+</style>

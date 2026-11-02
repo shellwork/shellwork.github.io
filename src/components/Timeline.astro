@@ -1,0 +1,89 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { formatRange } from '../lib/utils';
+
+interface Props {
+  items: CollectionEntry<'experience'>[];
+  compact?: boolean;
+}
+
+const { items, compact = false } = Astro.props;
+---
+
+<ol class:list={['timeline', { compact }]}>
+  {
+    items.map(({ data }) => (
+      <li data-reveal>
+        <div class="when faint">{formatRange(data.start, data.end)}</div>
+        <div class="what">
+          <div class="role">{data.role}</div>
+          <div class="org muted">
+            {data.orgUrl ? (
+              <a href={data.orgUrl} target="_blank" rel="noopener">
+                {data.org}
+              </a>
+            ) : (
+              data.org
+            )}
+            {data.location && !compact && <span class="faint"> · {data.location}</span>}
+          </div>
+          {data.advisor && <div class="advisor faint">Advisor: {data.advisor}</div>}
+          {!compact && data.details.length > 0 && (
+            <ul class="details">
+              {data.details.map((d) => (
+                <li>{d}</li>
+              ))}
+            </ul>
+          )}
+        </div>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .timeline {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .timeline > li {
+    display: grid;
+    grid-template-columns: 9.5rem 1fr;
+    gap: 1rem;
+    padding: 0.7rem 0;
+  }
+
+  .compact > li {
+    padding: 0.45rem 0;
+  }
+
+  .when {
+    font-size: 0.85rem;
+    padding-top: 0.12rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .role {
+    font-weight: 600;
+  }
+
+  .org,
+  .advisor {
+    font-size: 0.93rem;
+  }
+
+  .details {
+    margin: 0.35rem 0 0;
+    padding-left: 1.15rem;
+    font-size: 0.93rem;
+  }
+
+  @media (max-width: 560px) {
+    .timeline > li {
+      grid-template-columns: 1fr;
+      gap: 0.1rem;
+    }
+  }
+</style>

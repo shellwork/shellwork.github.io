@@ -1,0 +1,201 @@
+---
+import { site } from '../site.config';
+import { url } from '../lib/utils';
+
+const nav = [
+  { href: '/publications/', label: 'Publications' },
+  { href: '/projects/', label: 'Projects' },
+  { href: '/blog/', label: 'Blog' },
+  { href: '/cv/', label: 'CV' },
+];
+
+const path = Astro.url.pathname.replace(import.meta.env.BASE_URL.replace(/\/$/, ''), '') || '/';
+const isActive = (href: string) => path === href || path.startsWith(href) || `${path}/` === href;
+---
+
+<header class="site-header">
+  <div class="container wide inner">
+    <a class="brand" href={url('/')}>{site.name}</a>
+    <nav aria-label="Main">
+      <ul>
+        {
+          nav.map((item) => (
+            <li>
+              <a href={url(item.href)} aria-current={isActive(item.href) ? 'page' : undefined}>
+                {item.label}
+              </a>
+            </li>
+          ))
+        }
+        <li>
+          <button class="theme-toggle" type="button" aria-label="Toggle dark mode" title="Toggle dark mode">
+            <svg class="icon-moon" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <path fill="currentColor" d="M21 12.8A9 9 0 1 1 11.2 3a7 7 0 0 0 9.8 9.8Z"></path>
+            </svg>
+            <svg class="icon-sun" viewBox="0 0 24 24" width="18" height="18" aria-hidden="true">
+              <circle cx="12" cy="12" r="4.5" fill="currentColor"></circle>
+              <g stroke="currentColor" stroke-width="2" stroke-linecap="round">
+                <path d="M12 2v2M12 20v2M4.9 4.9l1.4 1.4M17.7 17.7l1.4 1.4M2 12h2M20 12h2M4.9 19.1l1.4-1.4M17.7 6.3l1.4-1.4"></path>
+              </g>
+            </svg>
+          </button>
+        </li>
+      </ul>
+    </nav>
+  </div>
+</header>
+
+<script>
+  // Add a soft shadow once the page scrolls under the sticky header.
+  const header = document.querySelector<HTMLElement>('.site-header');
+  const onScroll = () => header?.classList.toggle('scrolled', window.scrollY > 8);
+  window.addEventListener('scroll', onScroll, { passive: true });
+  onScroll();
+
+  const button = document.querySelector<HTMLButtonElement>('.theme-toggle');
+  button?.addEventListener('click', () => {
+    const root = document.documentElement;
+    const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+    root.dataset.theme = next;
+    try {
+      localStorage.setItem('theme', next);
+    } catch {}
+  });
+</script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: saturate(1.4) blur(10px);
+    -webkit-backdrop-filter: saturate(1.4) blur(10px);
+    border-bottom: 1px solid var(--border);
+    transition: box-shadow 0.3s;
+    /* Keeps the header still while the rest of the page cross-fades between pages. */
+    view-transition-name: site-header;
+  }
+
+  .site-header.scrolled {
+    box-shadow: 0 6px 20px -14px rgb(0 0 0 / 0.35);
+  }
+
+  .inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    min-height: 56px;
+  }
+
+  .brand {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: 1.1rem;
+    color: var(--text);
+    white-space: nowrap;
+  }
+
+  .brand:hover {
+    text-decoration: none;
+  }
+
+  ul {
+    display: flex;
+    align-items: center;
+    gap: 0.15rem;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  nav a {
+    position: relative;
+    display: block;
+    padding: 0.3rem 0.6rem;
+    border-radius: 6px;
+    color: var(--text-muted);
+    font-size: 0.93rem;
+  }
+
+  nav a:hover {
+    color: var(--text);
+    text-decoration: none;
+    background: var(--bg-subtle);
+  }
+
+  nav a[aria-current='page'] {
+    color: var(--text);
+    font-weight: 600;
+  }
+
+  nav a::after {
+    content: '';
+    position: absolute;
+    left: 0.6rem;
+    right: 0.6rem;
+    bottom: 0.1rem;
+    height: 2px;
+    border-radius: 2px;
+    background: var(--accent);
+    transform: scaleX(0);
+    transition: transform 0.3s var(--ease-out);
+  }
+
+  nav a[aria-current='page']::after {
+    transform: scaleX(1);
+  }
+
+  .theme-toggle {
+    display: grid;
+    place-items: center;
+    width: 34px;
+    height: 34px;
+    margin-left: 0.25rem;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    background: transparent;
+    color: var(--text-muted);
+    cursor: pointer;
+  }
+
+  .theme-toggle:hover {
+    color: var(--text);
+  }
+
+  .theme-toggle svg {
+    transition: transform 0.5s var(--ease-out);
+  }
+
+  .theme-toggle:hover svg {
+    transform: rotate(-25deg);
+  }
+
+  .icon-sun {
+    display: none;
+  }
+
+  :global(:root[data-theme='dark']) .icon-sun {
+    display: block;
+  }
+
+  :global(:root[data-theme='dark']) .icon-moon {
+    display: none;
+  }
+
+  @media (max-width: 560px) {
+    .inner {
+      flex-wrap: wrap;
+      justify-content: center;
+      padding-top: 0.5rem;
+      padding-bottom: 0.5rem;
+      gap: 0.25rem;
+    }
+
+    nav a {
+      padding: 0.3rem 0.45rem;
+      font-size: 0.88rem;
+    }
+  }
+</style>

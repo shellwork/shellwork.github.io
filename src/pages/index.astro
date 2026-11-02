@@ -1,0 +1,293 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PublicationItem from '../components/PublicationItem.astro';
+import ProjectCard from '../components/ProjectCard.astro';
+import PostList from '../components/PostList.astro';
+import Timeline from '../components/Timeline.astro';
+import Banner from '../components/Banner.astro';
+import { site } from '../site.config';
+import { formatDate, initials, inlineMarkdown, url } from '../lib/utils';
+import { getExperience, getNews, getPosts, getProjects, getPublications } from '../lib/content';
+
+const news = (await getNews()).slice(0, site.home.news);
+const selectedPubs = (await getPublications()).filter((p) => p.data.selected);
+const featuredProjects = (await getProjects()).filter((p) => p.data.featured);
+const recentPosts = (await getPosts()).slice(0, site.home.posts);
+const education = (await getExperience()).filter((e) => e.data.kind === 'education');
+
+const contactLinks = [
+  site.email && { label: 'Email', href: `mailto:${site.email}` },
+  site.links.github && { label: 'GitHub', href: site.links.github },
+  site.links.scholar && { label: 'Google Scholar', href: site.links.scholar },
+  site.links.orcid && { label: 'ORCID', href: site.links.orcid },
+  site.links.linkedin && { label: 'LinkedIn', href: site.links.linkedin },
+  site.links.twitter && { label: 'X / Twitter', href: site.links.twitter },
+  site.cvPdf && { label: 'CV (PDF)', href: url(site.cvPdf) },
+].filter(Boolean) as { label: string; href: string }[];
+---
+
+<BaseLayout>
+  <Banner slot="banner" />
+  <section class="hero">
+    <div class="avatar" aria-hidden={site.avatar ? undefined : 'true'}>
+      {site.avatar ? <img src={url(site.avatar)} alt={site.name} width="168" height="168" /> : <span>{initials(site.name)}</span>}
+    </div>
+    <div class="intro">
+      <h1>
+        {site.name}
+        {site.altName && <span class="alt-name">{site.altName}</span>}
+      </h1>
+      <p class="position">
+        {site.title} ·{' '}
+        {site.affiliationUrl ? <a href={site.affiliationUrl} target="_blank" rel="noopener">{site.affiliation}</a> : site.affiliation}
+      </p>
+      {site.bio.map((p) => <p class="bio">{p}</p>)}
+      <ul class="contact">
+        {
+          contactLinks.map((l) => (
+            <li>
+              <a href={l.href} target={l.href.startsWith('http') ? '_blank' : undefined} rel="noopener">
+                {l.label}
+              </a>
+            </li>
+          ))
+        }
+      </ul>
+    </div>
+  </section>
+
+  {
+    site.interests.length > 0 && (
+      <section class="section" data-reveal>
+        <h2 class="section-title">Research Interests</h2>
+        <ul class="tags">
+          {site.interests.map((i) => (
+            <li class="tag">{i}</li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    news.length > 0 && (
+      <section class="section" data-reveal>
+        <h2 class="section-title">News</h2>
+        <ul class="news">
+          {news.map((n) => (
+            <li>
+              <time class="faint" datetime={n.data.date.toISOString()}>
+                {formatDate(n.data.date, 'short')}
+              </time>
+              <span set:html={inlineMarkdown(n.data.text)} />
+            </li>
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    selectedPubs.length > 0 && (
+      <section class="section" data-reveal>
+        <h2 class="section-title">
+          Selected Publications <a href={url('/publications/')}>All publications →</a>
+        </h2>
+        <ul class="plain">
+          {selectedPubs.map((pub) => (
+            <PublicationItem pub={pub} />
+          ))}
+        </ul>
+      </section>
+    )
+  }
+
+  {
+    featuredProjects.length > 0 && (
+      <section class="section" data-reveal>
+        <h2 class="section-title">
+          Research Projects <a href={url('/projects/')}>All projects →</a>
+        </h2>
+        <div class="grid">
+          {featuredProjects.map((p) => (
+            <ProjectCard project={p} />
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    education.length > 0 && (
+      <section class="section" data-reveal>
+        <h2 class="section-title">
+          Education <a href={url('/cv/')}>Full CV →</a>
+        </h2>
+        <Timeline items={education} compact />
+      </section>
+    )
+  }
+
+  {
+    recentPosts.length > 0 && (
+      <section class="section" data-reveal>
+        <h2 class="section-title">
+          Recent Writing <a href={url('/blog/')}>All posts →</a>
+        </h2>
+        <PostList posts={recentPosts} />
+      </section>
+    )
+  }
+</BaseLayout>
+
+<style>
+  .hero {
+    position: relative;
+    display: grid;
+    grid-template-columns: 168px 1fr;
+    gap: 2.25rem;
+    align-items: start;
+    /* Pull the avatar up so it overlaps the bottom edge of the banner. */
+    margin-top: -84px;
+  }
+
+  .intro {
+    padding-top: 96px;
+  }
+
+  .avatar {
+    width: 168px;
+    height: 168px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: grid;
+    place-items: center;
+    background: linear-gradient(135deg, var(--accent-soft), var(--bg-subtle));
+    border: 5px solid var(--bg);
+    box-shadow: 0 8px 28px -12px rgb(0 0 0 / 0.35);
+  }
+
+  :global(:root.motion) .hero {
+    animation: rise 0.9s 0.15s var(--ease-out) both;
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      translate: 0 20px;
+    }
+  }
+
+  .avatar img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  .avatar span {
+    font-family: var(--font-serif);
+    font-size: 3rem;
+    color: var(--accent);
+  }
+
+  h1 {
+    font-family: var(--font-serif);
+    font-size: 2.4rem;
+    font-weight: 600;
+    margin-bottom: 0.2rem;
+  }
+
+  .alt-name {
+    margin-left: 0.6rem;
+    font-size: 1.4rem;
+    font-weight: 400;
+    color: var(--text-muted);
+  }
+
+  .position {
+    color: var(--text-muted);
+    margin-bottom: 1.1rem;
+  }
+
+  .bio {
+    margin-bottom: 0.8rem;
+  }
+
+  .contact {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem 1.1rem;
+    list-style: none;
+    padding: 0;
+    margin: 1.1rem 0 0;
+    font-size: 0.93rem;
+    font-weight: 500;
+  }
+
+  .news {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .news li {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr;
+    gap: 1rem;
+    padding: 0.35rem 0;
+  }
+
+  .news time {
+    font-size: 0.85rem;
+    padding-top: 0.12rem;
+    font-variant-numeric: tabular-nums;
+  }
+
+  .plain {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+
+  .grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  @media (max-width: 640px) {
+    .hero {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      margin-top: -56px;
+    }
+
+    .intro {
+      padding-top: 0;
+    }
+
+    .avatar {
+      width: 112px;
+      height: 112px;
+      border-width: 4px;
+    }
+
+    .avatar span {
+      font-size: 2rem;
+    }
+
+    h1 {
+      font-size: 2rem;
+    }
+
+    .alt-name {
+      display: block;
+      margin: 0.2rem 0 0;
+      font-size: 1.15rem;
+    }
+
+    .news li {
+      grid-template-columns: 1fr;
+      gap: 0;
+    }
+  }
+</style>

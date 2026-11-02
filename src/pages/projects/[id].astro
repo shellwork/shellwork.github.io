@@ -1,0 +1,128 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import { Image } from 'astro:assets';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PublicationItem from '../../components/PublicationItem.astro';
+import { getProjects, getPublications } from '../../lib/content';
+import { formatRange, linkLabels, url } from '../../lib/utils';
+
+export const getStaticPaths = (async () => {
+  const projects = await getProjects();
+  return projects.map((project) => ({ params: { id: project.id }, props: { project } }));
+}) satisfies GetStaticPaths;
+
+const { project } = Astro.props;
+const { data } = project;
+const { Content } = await render(project);
+const relatedPubs = (await getPublications()).filter((p) => p.data.project === project.id);
+const linkEntries = Object.entries(data.links).filter(([, href]) => href);
+---
+
+<BaseLayout title={data.title} description={data.summary}>
+  <article>
+    <header class="page-header">
+      <a class="back" href={url('/projects/')}>← All projects</a>
+      <h1>{data.title}</h1>
+      <p class="meta">
+        {formatRange(data.start, data.end)}
+        {data.role && <> · {data.role}</>}
+        {data.lab && <> · {data.lab}</>}
+      </p>
+      <p class="summary">{data.summary}</p>
+      {
+        linkEntries.length > 0 && (
+          <div class="pill-links">
+            {linkEntries.map(([key, href]) => (
+              <a href={href} target="_blank" rel="noopener">
+                {linkLabels[key] ?? key}
+              </a>
+            ))}
+          </div>
+        )
+      }
+    </header>
+
+    {data.cover && <Image class="cover" src={data.cover} alt="" width={1200} />}
+
+    {
+      data.contributions.length > 0 && (
+        <aside class="contrib">
+          <h2>Key contributions</h2>
+          <ul>
+            {data.contributions.map((c) => (
+              <li>{c}</li>
+            ))}
+          </ul>
+        </aside>
+      )
+    }
+
+    <div class="prose">
+      <Content />
+    </div>
+
+    {
+      relatedPubs.length > 0 && (
+        <section class="section">
+          <h2 class="section-title">Related publications</h2>
+          <ul class="plain">
+            {relatedPubs.map((pub) => (
+              <PublicationItem pub={pub} />
+            ))}
+          </ul>
+        </section>
+      )
+    }
+  </article>
+</BaseLayout>
+
+<style>
+  .back {
+    display: inline-block;
+    font-size: 0.88rem;
+    margin-bottom: 1rem;
+  }
+
+  .meta {
+    font-size: 0.93rem;
+  }
+
+  .summary {
+    color: var(--text) !important;
+    font-size: 1.08rem;
+    margin: 0.8rem 0 1rem !important;
+  }
+
+  .cover {
+    width: 100%;
+    border-radius: var(--radius);
+    margin-bottom: 2rem;
+  }
+
+  .contrib {
+    padding: 1rem 1.25rem;
+    border-radius: var(--radius);
+    background: var(--accent-soft);
+    margin-bottom: 2rem;
+  }
+
+  .contrib h2 {
+    font-size: 0.8rem;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 0.5rem;
+  }
+
+  .contrib ul {
+    margin: 0;
+    padding-left: 1.2rem;
+  }
+
+  .plain {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+  }
+</style>

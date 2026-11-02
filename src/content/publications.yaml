@@ -1,0 +1,71 @@
+# Publications. Each entry needs a unique `id` (used for anchors and BibTeX).
+# Newest entries can go anywhere; the site sorts by year.
+# Your name is highlighted automatically using `authorNames` in src/site.config.ts.
+# `image` is the paper's main figure: put the file in src/content/figures/ and
+# reference it as ./figures/<file>. PNG, JPG, WebP and SVG all work; the site resizes it.
+# Co-first authors get a trailing "*" plus `equalContribution: true`.
+
+- id: chen2026autobiolab
+  title: "AutoBioLab: From Scientific Intent to Machine Executable Laboratory Automation"
+  authors: ["Baiding Chen*", "Gweneth Ge*", "Yang Liu", "Mian Wu", "Jiayi Li", "Yingcheng Wu", "Rebecca E. Taylor", "Min Xu"]
+  equalContribution: true
+  venue: "Under review"
+  venueShort: "Under review"
+  year: 2026
+  type: preprint
+  selected: true
+  project: autobiolab
+  image: ./figures/autobiolab.png
+
+- id: dai2026osworldscience
+  title: "OSWorld-Science: A Benchmark of Computer Use Agents for Learning and Using Scientific Software"
+  authors: ["Dingyuan Dai", "Heli Qi", "Lei Liu", "Yinxi Li", "Baiding Chen", "…", "Tianyu Liu"]
+  venue: "arXiv preprint arXiv:2609.39903 (under review at ICLR)"
+  venueShort: "arXiv 2026"
+  year: 2026
+  type: preprint
+  selected: true
+  project: osworld-science
+  image: ./figures/osworld-science.png
+  links:
+    arxiv: "https://arxiv.org/abs/2609.39903"
+
+- id: chen2026cryopass
+  title: "CryoPASS: Collapse-Free Unsupervised Domain Adaptation for Sparse-Foreground Cryo-ET Segmentation"
+  authors: ["Baiding Chen", "Xiaolong Wu", "Xi Xiao", "Mian Wu", "Qiayi Zha", "Haoran Li", "Johan Barthelemy", "Tianyang Wang", "Xingjian Li", "Min Xu"]
+  venue: "Under review at AAAI"
+  venueShort: "Under review"
+  year: 2026
+  type: preprint
+  selected: true
+  project: cryopass
+  image: ./figures/cryopass.png
+
+- id: wen2026exosomes
+  title: "A Nanoparticle-Integrated Complete Manufacturing Pipeline of Chemically Engineered Exosomes"
+  authors: ["Xiaowei Wen", "Zixing Xu", "Zerun Hao", "Yanming Chen", "Kai Xie", "Haofan Yin", "Xueying Wang", "Jie Min", "Sihan Sun", "Baiding Chen", "Chengxiu Ling", "Mingming Xu", "Yizhao Chen", "Gang Ruan"]
+  venue: "Advanced Science"
+  venueShort: "Adv. Sci."
+  year: 2026
+  type: journal
+  image: ./figures/exosomes.webp
+  links:
+    doi: "https://doi.org/10.1002/advs.202516075"
+
+- id: zha2026deepmerip
+  title: "DeepMerip: A Deep Learning Framework for Denoising MeRIP-Seq Data with Low Sequencing Depth"
+  authors: ["Qiayi Zha*", "Baiding Chen*", "Haokai Ye", "Xichen Zhao", "Zhen Wei"]
+  equalContribution: true
+  venue: "Under review at BMC Bioinformatics"
+  venueShort: "Under review"
+  year: 2026
+  type: preprint
+  project: deepmerip
+
+- id: liu2026fluxchamber
+  title: "Efficient CO₂ and CH₄ Flux Monitoring in Soil Microcosms Using an Automated Chamber with a Cartesian Robot"
+  authors: ["Hao Liu", "Yining Zhang", "Ziyan Liu", "Baiding Chen", "Royston Goodacre", "Zheng Chen"]
+  venue: "Under review at Methods in Ecology and Evolution"
+  venueShort: "Under review"
+  year: 2026
+  type: preprint

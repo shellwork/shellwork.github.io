@@ -1,0 +1,156 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import PostCard from '../../components/PostCard.astro';
+import { getPosts } from '../../lib/content';
+import { url } from '../../lib/utils';
+
+const posts = await getPosts();
+const [latest, ...rest] = posts;
+
+const tagCounts = new Map<string, number>();
+posts.flatMap((p) => p.data.tags).forEach((t) => tagCounts.set(t, (tagCounts.get(t) ?? 0) + 1));
+const tags = [...tagCounts.entries()].sort((a, b) => b[1] - a[1] || a[0].localeCompare(b[0]));
+---
+
+<BaseLayout title="Blog" description="Notes and writing." wide>
+  <div class="blog">
+    <header class="page-header">
+      <h1>Blog</h1>
+      <p>Notes on research, tools and things I am learning. <a href={url('/rss.xml')}>RSS</a></p>
+    </header>
+
+    {
+      tags.length > 0 && (
+        <div class="filters" role="group" aria-label="Filter by tag">
+          <button type="button" class="chip" data-tag="" aria-pressed="true">
+            All <span>{posts.length}</span>
+          </button>
+          {tags.map(([tag, count]) => (
+            <button type="button" class="chip" data-tag={tag} aria-pressed="false">
+              #{tag} <span>{count}</span>
+            </button>
+          ))}
+        </div>
+      )
+    }
+
+    {posts.length === 0 && <p class="muted">No posts yet.</p>}
+
+    {latest && <PostCard post={latest} featured />}
+
+    {
+      rest.length > 0 && (
+        <div class="grid">
+          {rest.map((post) => (
+            <PostCard post={post} />
+          ))}
+        </div>
+      )
+    }
+
+    <p class="empty muted" hidden>No posts with this tag yet.</p>
+  </div>
+</BaseLayout>
+
+<script>
+  const chips = document.querySelectorAll<HTMLButtonElement>('.chip');
+  const cards = document.querySelectorAll<HTMLElement>('.post-card');
+  const empty = document.querySelector<HTMLElement>('.empty');
+
+  const apply = (tag: string) => {
+    chips.forEach((c) => c.setAttribute('aria-pressed', String(c.dataset.tag === tag)));
+    let shown = 0;
+    cards.forEach((card) => {
+      const match = !tag || (card.dataset.tags ?? '').split('|').includes(tag);
+      card.hidden = !match;
+      if (match) {
+        shown++;
+        // Replay a small entrance so filtering feels responsive.
+        card.classList.remove('pop');
+        void card.offsetWidth;
+        card.classList.add('pop');
+      }
+    });
+    if (empty) empty.hidden = shown > 0;
+    const params = new URLSearchParams(location.search);
+    if (tag) params.set('tag', tag);
+    else params.delete('tag');
+    const query = params.toString();
+    history.replaceState(null, '', query ? `?${query}` : location.pathname);
+  };
+
+  chips.forEach((chip) => chip.addEventListener('click', () => apply(chip.dataset.tag ?? '')));
+
+  // Support links like /blog/?tag=research from post pages.
+  const initial = new URLSearchParams(location.search).get('tag');
+  if (initial && [...chips].some((c) => c.dataset.tag === initial)) apply(initial);
+</script>
+
+<style>
+  .blog {
+    max-width: var(--width);
+    margin: 0 auto;
+  }
+
+  .filters {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.45rem;
+    margin: -0.5rem 0 2rem;
+  }
+
+  .chip {
+    font: inherit;
+    font-size: 0.85rem;
+    padding: 0.3rem 0.8rem;
+    border-radius: 999px;
+    border: 1px solid var(--border);
+    background: var(--bg-elev);
+    color: var(--text-muted);
+    cursor: pointer;
+    transition:
+      background-color 0.2s,
+      color 0.2s,
+      border-color 0.2s,
+      transform 0.15s;
+  }
+
+  .chip span {
+    margin-left: 0.2rem;
+    font-size: 0.75rem;
+    opacity: 0.7;
+  }
+
+  .chip:hover {
+    color: var(--text);
+    border-color: var(--accent);
+  }
+
+  .chip:active {
+    transform: scale(0.96);
+  }
+
+  .chip[aria-pressed='true'] {
+    background: var(--accent);
+    border-color: var(--accent);
+    color: var(--bg);
+  }
+
+  .grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 300px), 1fr));
+    gap: 1.25rem;
+    margin-top: 1.25rem;
+  }
+
+  :global(:root.motion) .blog :global(.post-card.pop) {
+    animation: pop 0.45s var(--ease-out);
+  }
+
+  @keyframes pop {
+    from {
+      opacity: 0;
+      transform: translateY(8px) scale(0.98);
+    }
+  }
+</style>

@@ -1,0 +1,101 @@
+---
+import '../styles/global.css';
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+import { site } from '../site.config';
+import { url } from '../lib/utils';
+import { resolveAccent } from '../lib/theme';
+
+interface Props {
+  title?: string;
+  description?: string;
+  wide?: boolean;
+  image?: string;
+}
+
+const { title, description = site.description, wide = false, image } = Astro.props;
+const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · ${site.title}`;
+const canonical = Astro.site ? new URL(Astro.url.pathname, Astro.site).href : undefined;
+const ogImage = image && Astro.site ? new URL(image, Astro.site).href : undefined;
+const { motion } = site.theme;
+const accent = await resolveAccent();
+const themeVars = `:root{--accent:${accent.light};}:root[data-theme='dark']{--accent:${accent.dark};}`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    {canonical && <link rel="canonical" href={canonical} />}
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    {canonical && <meta property="og:url" content={canonical} />}
+    {ogImage && <meta property="og:image" content={ogImage} />}
+    <link rel="icon" type="image/svg+xml" href={url('/favicon.svg')} />
+    <link rel="icon" href={url('/favicon.ico')} />
+    <link rel="alternate" type="application/rss+xml" title={`${site.name} · Blog`} href={url('/rss.xml')} />
+    <link rel="sitemap" href={url('/sitemap-index.xml')} />
+    <meta name="theme-color" content="#fbfbf9" media="(prefers-color-scheme: light)" />
+    <meta name="theme-color" content="#111315" media="(prefers-color-scheme: dark)" />
+    <style set:html={themeVars}></style>
+    <script is:inline define:vars={{ motion }}>
+      // Apply the saved or system theme before first paint to avoid a flash.
+      (() => {
+        const root = document.documentElement;
+        let theme = null;
+        try {
+          theme = localStorage.getItem('theme');
+        } catch {}
+        if (theme !== 'light' && theme !== 'dark') {
+          theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+        }
+        root.dataset.theme = theme;
+        // Animations only run when enabled in site.config.ts and the visitor has not asked for reduced motion.
+        if (motion && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          root.classList.add('motion');
+        }
+      })();
+    </script>
+  </head>
+  <body>
+    <a class="visually-hidden" href="#main">Skip to content</a>
+    <Header />
+    <slot name="banner" />
+    <main id="main" class:list={['container', { wide }]}>
+      <slot />
+    </main>
+    <Footer />
+    <script>
+      // Fade elements marked with data-reveal in as they scroll into view.
+      // Siblings get a small stagger through the --i custom property.
+      const root = document.documentElement;
+      const items = document.querySelectorAll<HTMLElement>('[data-reveal]');
+      if (root.classList.contains('motion') && 'IntersectionObserver' in window) {
+        items.forEach((el) => {
+          const siblings = el.parentElement?.querySelectorAll(':scope > [data-reveal]');
+          const index = siblings ? Array.prototype.indexOf.call(siblings, el) : 0;
+          el.style.setProperty('--i', String(Math.min(index, 6)));
+        });
+        const io = new IntersectionObserver(
+          (entries) => {
+            entries.forEach((entry) => {
+              if (entry.isIntersecting) {
+                entry.target.classList.add('is-visible');
+                io.unobserve(entry.target);
+              }
+            });
+          },
+          { rootMargin: '0px 0px -8% 0px' },
+        );
+        items.forEach((el) => io.observe(el));
+      } else {
+        items.forEach((el) => el.classList.add('is-visible'));
+      }
+    </script>
+  </body>
+</html>

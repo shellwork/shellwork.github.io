@@ -1,0 +1,40 @@
+---
+import { site } from '../site.config';
+import { url } from '../lib/utils';
+
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="container wide inner">
+    <span>© {year} {site.name}</span>
+    <span class="links">
+      <a href={url('/rss.xml')}>RSS</a>
+      {site.links.github && <a href={site.links.github} target="_blank" rel="noopener">GitHub</a>}
+      <span class="faint">Built with Astro</span>
+    </span>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    margin-top: 5rem;
+    border-top: 1px solid var(--border);
+    font-size: 0.85rem;
+    color: var(--text-muted);
+  }
+
+  .inner {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 0.5rem 1rem;
+    padding-top: 1.5rem;
+    padding-bottom: 2rem;
+  }
+
+  .links {
+    display: flex;
+    gap: 1rem;
+  }
+</style>

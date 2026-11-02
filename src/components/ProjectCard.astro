@@ -1,0 +1,107 @@
+---
+import type { CollectionEntry } from 'astro:content';
+import { Image } from 'astro:assets';
+import { formatRange, url } from '../lib/utils';
+
+interface Props {
+  project: CollectionEntry<'projects'>;
+}
+
+const { project } = Astro.props;
+const { data } = project;
+const href = url(`/projects/${project.id}/`);
+---
+
+<article class="card lift" data-reveal>
+  {
+    data.cover && (
+      <a href={href} class="cover" tabindex="-1" aria-hidden="true">
+        <Image src={data.cover} alt="" width={720} />
+      </a>
+    )
+  }
+  <div class="meta faint">
+    <span>{formatRange(data.start, data.end)}</span>
+    {data.role && <span>· {data.role}</span>}
+  </div>
+  <h3><a href={href}>{data.title}</a></h3>
+  {data.lab && <div class="lab muted">{data.lab}</div>}
+  <p class="summary">{data.summary}</p>
+  {
+    data.contributions.length > 0 && (
+      <ul class="contrib">
+        {data.contributions.map((c) => (
+          <li>{c}</li>
+        ))}
+      </ul>
+    )
+  }
+  {
+    data.tags.length > 0 && (
+      <ul class="tags">
+        {data.tags.map((t) => (
+          <li class="tag">{t}</li>
+        ))}
+      </ul>
+    )
+  }
+</article>
+
+<style>
+  .card {
+    padding: 1.25rem 1.35rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-elev);
+  }
+
+  .cover {
+    display: block;
+    margin: -1.25rem -1.35rem 1rem;
+    border-radius: var(--radius) var(--radius) 0 0;
+    overflow: hidden;
+  }
+
+  .cover img {
+    display: block;
+    width: 100%;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+  }
+
+  .meta {
+    font-size: 0.8rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.3rem;
+  }
+
+  h3 {
+    margin: 0.3rem 0 0.15rem;
+    font-size: 1.12rem;
+  }
+
+  h3 a {
+    color: var(--text);
+  }
+
+  .lab {
+    font-size: 0.88rem;
+  }
+
+  .summary {
+    margin: 0.6rem 0;
+    font-size: 0.95rem;
+  }
+
+  .contrib {
+    margin: 0 0 0.9rem;
+    padding-left: 1.15rem;
+    font-size: 0.9rem;
+    color: var(--text-muted);
+  }
+
+  .contrib li + li {
+    margin-top: 0.2rem;
+  }
+</style>

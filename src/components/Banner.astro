@@ -1,0 +1,211 @@
+---
+import { Image } from 'astro:assets';
+import { site } from '../site.config';
+import { assetImage, assetSvg } from '../lib/assets';
+
+const { banner } = site.theme;
+// SVG banners are inlined so their own animations and dark-mode colors work;
+// other formats go through the image pipeline.
+const svg = banner.image.toLowerCase().endsWith('.svg') ? assetSvg(banner.image) : undefined;
+const image = svg ? undefined : assetImage(banner.image);
+// Width/height of the SVG's viewBox: the scene is scaled to the banner height
+// and centered, and anything drawn beyond the viewBox fills wide screens.
+const [, , vbW = 4, vbH = 1] = svg?.match(/viewBox="([^"]+)"/)?.[1].split(/[\s,]+/).map(Number) ?? [];
+---
+
+<div
+  class:list={['banner', { 'is-svg': svg }]}
+  style={`--banner-h: ${banner.height}px; --banner-pos: ${banner.position}; --banner-ratio: ${vbW / vbH};`}
+>
+  {
+    svg ? (
+      <div
+        class="banner-img banner-svg"
+        role={banner.alt ? 'img' : undefined}
+        aria-label={banner.alt || undefined}
+        aria-hidden={banner.alt ? undefined : 'true'}
+        set:html={svg}
+      />
+    ) : image ? (
+      <Image
+        class="banner-img"
+        src={image}
+        alt={banner.alt}
+        widths={[800, 1400, 2000, 2600]}
+        sizes="100vw"
+        loading="eager"
+        fetchpriority="high"
+      />
+    ) : (
+      <div class="banner-gradient" aria-hidden="true">
+        <span />
+        <span />
+        <span />
+      </div>
+    )
+  }
+  <div class="banner-fade" aria-hidden="true"></div>
+</div>
+
+<script>
+  // Gentle parallax: the banner drifts slower than the page while it is on screen.
+  const banner = document.querySelector<HTMLElement>('.banner');
+  const img = document.querySelector<HTMLElement>('.banner-img, .banner-gradient');
+  const motionOk = document.documentElement.classList.contains('motion');
+  if (img && motionOk) {
+    let ticking = false;
+    const update = () => {
+      const y = Math.min(window.scrollY, 600);
+      img.style.translate = `0 ${y * 0.25}px`;
+      ticking = false;
+    };
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      },
+      { passive: true },
+    );
+    update();
+  }
+  // Animated SVG banners pause while scrolled out of view.
+  if (banner?.classList.contains('is-svg') && 'IntersectionObserver' in window) {
+    new IntersectionObserver(([entry]) => banner.classList.toggle('is-offscreen', !entry.isIntersecting)).observe(banner);
+  }
+</script>
+
+<style>
+  .banner {
+    --bh: var(--banner-h);
+    position: relative;
+    height: var(--bh);
+    overflow: hidden;
+    background: var(--bg-subtle);
+  }
+
+  .banner-img,
+  .banner-gradient {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    object-position: var(--banner-pos);
+    scale: 1.04;
+    will-change: translate;
+  }
+
+  :global(:root[data-theme='dark']) .banner-img:not(.banner-svg) {
+    filter: brightness(0.72) saturate(0.9);
+  }
+
+  /* Never narrower than the scene, so phones crop its sides instead of shrinking it. */
+  .banner-svg {
+    left: 50%;
+    width: max(100%, calc(var(--bh) * var(--banner-ratio)));
+    transform: translateX(-50%);
+    scale: 1;
+  }
+
+  .banner-svg :global(svg) {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+  }
+
+  .banner.is-offscreen .banner-svg :global(*) {
+    animation-play-state: paused !important;
+  }
+
+  :global(:root:not(.motion)) .banner-svg :global(*) {
+    animation: none !important;
+  }
+
+  /* Blends the banner into the page background. */
+  .banner-fade {
+    position: absolute;
+    inset: auto 0 0 0;
+    height: 45%;
+    background: linear-gradient(to bottom, transparent, var(--bg));
+    pointer-events: none;
+  }
+
+  .is-svg .banner-fade {
+    height: 22%;
+  }
+
+  /* Fallback when no image is set: slowly drifting blobs in the accent color. */
+  .banner-gradient {
+    background: color-mix(in srgb, var(--accent) 10%, var(--bg));
+    filter: blur(48px) saturate(1.1);
+  }
+
+  .banner-gradient span {
+    position: absolute;
+    width: 45%;
+    aspect-ratio: 1;
+    border-radius: 50%;
+    opacity: 0.55;
+  }
+
+  .banner-gradient span:nth-child(1) {
+    left: -5%;
+    top: -40%;
+    background: var(--accent);
+    animation: drift 22s ease-in-out infinite alternate;
+  }
+
+  .banner-gradient span:nth-child(2) {
+    right: -8%;
+    top: -30%;
+    background: #e8b48c;
+    animation: drift 26s ease-in-out infinite alternate-reverse;
+  }
+
+  .banner-gradient span:nth-child(3) {
+    left: 35%;
+    top: 10%;
+    background: color-mix(in srgb, var(--accent) 50%, #9fd3c7);
+    animation: drift 30s ease-in-out infinite alternate;
+  }
+
+  @keyframes drift {
+    to {
+      transform: translate(12%, 18%) scale(1.15);
+    }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    :global(:root.motion) .banner-img:not(.banner-svg) {
+      animation: settle 1.4s cubic-bezier(0.2, 0.7, 0.2, 1) both;
+    }
+  }
+
+  /* Uses `scale` (not `transform`) so it composes with the parallax `translate`. */
+  @keyframes settle {
+    from {
+      opacity: 0;
+      scale: 1.1;
+    }
+    to {
+      opacity: 1;
+      scale: 1.04;
+    }
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    .banner-gradient span {
+      animation: none;
+    }
+  }
+
+  @media (max-width: 640px) {
+    .banner {
+      --bh: calc(var(--banner-h) * 0.6);
+    }
+  }
+</style>

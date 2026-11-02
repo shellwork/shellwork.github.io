@@ -1,0 +1,438 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { render } from 'astro:content';
+import { Image, getImage } from 'astro:assets';
+import 'katex/dist/katex.min.css';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import { getPosts } from '../../lib/content';
+import { cssIdent, formatDate, readingTime, url } from '../../lib/utils';
+
+export const getStaticPaths = (async () => {
+  const posts = await getPosts();
+  return posts.map((post, i) => ({
+    params: { id: post.id },
+    // Posts are sorted newest first.
+    props: { post, newer: posts[i - 1], older: posts[i + 1] },
+  }));
+}) satisfies GetStaticPaths;
+
+const { post, newer, older } = Astro.props;
+const { data } = post;
+const { Content, headings } = await render(post);
+const tocHeadings = headings.filter((h) => h.depth === 2 || h.depth === 3);
+const showToc = data.toc && tocHeadings.length >= 2;
+const minutes = readingTime(post.body);
+const vt = cssIdent(post.id);
+const ogImage = data.cover ? (await getImage({ src: data.cover, width: 1200 })).src : undefined;
+---
+
+<BaseLayout title={data.title} description={data.description} image={ogImage} wide>
+  <div class="progress" aria-hidden="true"><span></span></div>
+
+  <div class:list={['post-layout', { 'has-toc': showToc }]}>
+    <article class="post">
+      <header class="post-header">
+        <a class="back" href={url('/blog/')}>← All posts</a>
+        <h1 style={`view-transition-name: post-title-${vt}`}>{data.title}</h1>
+        {data.description && <p class="lede">{data.description}</p>}
+        <p class="meta">
+          <time datetime={data.date.toISOString()}>{formatDate(data.date)}</time>
+          <span>· {minutes} min read</span>
+          {data.updated && <span>· Updated {formatDate(data.updated)}</span>}
+          {data.draft && <strong class="draft">· Draft</strong>}
+        </p>
+        {
+          data.tags.length > 0 && (
+            <ul class="tags">
+              {data.tags.map((t) => (
+                <li>
+                  <a class="tag" href={url(`/blog/?tag=${encodeURIComponent(t)}`)}>
+                    #{t}
+                  </a>
+                </li>
+              ))}
+            </ul>
+          )
+        }
+      </header>
+
+      {
+        data.cover && (
+          <Image
+            class="cover"
+            src={data.cover}
+            alt=""
+            widths={[720, 1080, 1440]}
+            sizes="(min-width: 760px) 720px, 100vw"
+            loading="eager"
+            style={`view-transition-name: post-cover-${vt}`}
+          />
+        )
+      }
+
+      <div class="prose" data-reveal>
+        <Content />
+      </div>
+
+      {
+        (newer || older) && (
+          <nav class="pager" aria-label="More posts">
+            {older ? (
+              <a class="lift" href={url(`/blog/${older.id}/`)}>
+                <span class="faint">← Older</span>
+                <strong>{older.data.title}</strong>
+              </a>
+            ) : (
+              <span />
+            )}
+            {newer && (
+              <a class="lift next" href={url(`/blog/${newer.id}/`)}>
+                <span class="faint">Newer →</span>
+                <strong>{newer.data.title}</strong>
+              </a>
+            )}
+          </nav>
+        )
+      }
+    </article>
+
+    {
+      showToc && (
+        <aside class="toc" aria-label="Table of contents">
+          <div class="toc-inner">
+            <div class="toc-title">On this page</div>
+            <ol>
+              {tocHeadings.map((h) => (
+                <li class={`d${h.depth}`}>
+                  <a href={`#${h.slug}`}>{h.text}</a>
+                </li>
+              ))}
+            </ol>
+          </div>
+        </aside>
+      )
+    }
+  </div>
+</BaseLayout>
+
+<script>
+  const article = document.querySelector<HTMLElement>('.post');
+  const bar = document.querySelector<HTMLElement>('.progress span');
+  const prose = document.querySelector<HTMLElement>('.post .prose');
+
+  // Reading progress bar.
+  if (article && bar) {
+    let ticking = false;
+    const update = () => {
+      const rect = article.getBoundingClientRect();
+      const total = rect.height - window.innerHeight;
+      const p = total > 0 ? Math.min(1, Math.max(0, -rect.top / total)) : 1;
+      bar.style.transform = `scaleX(${p})`;
+      ticking = false;
+    };
+    window.addEventListener(
+      'scroll',
+      () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      },
+      { passive: true },
+    );
+    window.addEventListener('resize', update);
+    update();
+  }
+
+  if (prose) {
+    // "#" anchor links on headings.
+    prose.querySelectorAll<HTMLHeadingElement>('h2[id], h3[id]').forEach((h) => {
+      const a = document.createElement('a');
+      a.className = 'anchor';
+      a.href = `#${h.id}`;
+      a.setAttribute('aria-label', 'Link to this section');
+      a.textContent = '#';
+      h.append(a);
+    });
+
+    // Copy buttons on code blocks.
+    prose.querySelectorAll<HTMLPreElement>('pre').forEach((pre) => {
+      const wrap = document.createElement('div');
+      wrap.className = 'code-wrap';
+      pre.replaceWith(wrap);
+      wrap.append(pre);
+      const btn = document.createElement('button');
+      btn.type = 'button';
+      btn.className = 'copy-code';
+      btn.textContent = 'Copy';
+      btn.addEventListener('click', async () => {
+        try {
+          await navigator.clipboard.writeText(pre.innerText);
+          btn.textContent = 'Copied';
+        } catch {
+          btn.textContent = 'Failed';
+        }
+        setTimeout(() => (btn.textContent = 'Copy'), 1500);
+      });
+      wrap.append(btn);
+    });
+  }
+
+  // Highlight the section currently being read in the table of contents.
+  const tocLinks = new Map<string, HTMLAnchorElement>();
+  document.querySelectorAll<HTMLAnchorElement>('.toc a').forEach((a) => {
+    tocLinks.set(decodeURIComponent(a.hash.slice(1)), a);
+  });
+  if (tocLinks.size && prose) {
+    const headings = [...prose.querySelectorAll<HTMLElement>('h2[id], h3[id]')].filter((h) => tocLinks.has(h.id));
+    const setActive = () => {
+      let current = headings[0];
+      for (const h of headings) {
+        if (h.getBoundingClientRect().top < 120) current = h;
+      }
+      tocLinks.forEach((a, id) => a.classList.toggle('active', id === current?.id));
+    };
+    window.addEventListener('scroll', setActive, { passive: true });
+    setActive();
+  }
+</script>
+
+<style>
+  .progress {
+    position: fixed;
+    inset: 0 0 auto 0;
+    height: 3px;
+    z-index: 30;
+    pointer-events: none;
+  }
+
+  .progress span {
+    display: block;
+    height: 100%;
+    background: var(--accent);
+    transform: scaleX(0);
+    transform-origin: 0 50%;
+  }
+
+  .post-layout {
+    max-width: var(--width);
+    margin: 0 auto;
+  }
+
+  .post {
+    min-width: 0;
+  }
+
+  .post-header {
+    margin: 3rem 0 2rem;
+  }
+
+  .back {
+    display: inline-block;
+    font-size: 0.88rem;
+    margin-bottom: 1.25rem;
+    transition: translate 0.2s var(--ease-out);
+  }
+
+  .back:hover {
+    text-decoration: none;
+    translate: -3px 0;
+  }
+
+  h1 {
+    font-family: var(--font-serif);
+    font-weight: 600;
+    font-size: clamp(1.9rem, 4.5vw, 2.6rem);
+    line-height: 1.15;
+    margin-bottom: 0.6rem;
+  }
+
+  .lede {
+    font-size: 1.12rem;
+    color: var(--text-muted);
+    margin-bottom: 0.9rem;
+  }
+
+  .meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.35rem;
+    font-size: 0.9rem;
+    color: var(--text-faint);
+    margin-bottom: 0.8rem;
+  }
+
+  .tags a:hover {
+    text-decoration: none;
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+
+  .draft {
+    color: var(--highlight);
+  }
+
+  .cover {
+    display: block;
+    width: 100%;
+    height: auto;
+    aspect-ratio: 16 / 9;
+    object-fit: cover;
+    border-radius: 14px;
+    margin-bottom: 2.5rem;
+  }
+
+  /* Heading anchors and code copy buttons are added by the script above. */
+  .prose :global(h2),
+  .prose :global(h3) {
+    position: relative;
+    scroll-margin-top: 80px;
+  }
+
+  .prose :global(.anchor) {
+    margin-left: 0.4rem;
+    color: var(--text-faint);
+    background: none;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .prose :global(h2:hover .anchor),
+  .prose :global(h3:hover .anchor),
+  .prose :global(.anchor:focus-visible) {
+    opacity: 1;
+  }
+
+  .prose :global(.code-wrap) {
+    position: relative;
+  }
+
+  .prose :global(.copy-code) {
+    position: absolute;
+    top: 0.5rem;
+    right: 0.5rem;
+    font: inherit;
+    font-size: 0.74rem;
+    padding: 0.15rem 0.55rem;
+    border-radius: 6px;
+    border: 1px solid var(--border);
+    background: var(--bg-elev);
+    color: var(--text-muted);
+    cursor: pointer;
+    opacity: 0;
+    transition: opacity 0.2s;
+  }
+
+  .prose :global(.code-wrap:hover .copy-code),
+  .prose :global(.copy-code:focus-visible) {
+    opacity: 1;
+  }
+
+  .pager {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1rem;
+    margin-top: 4rem;
+  }
+
+  .pager a {
+    display: flex;
+    flex-direction: column;
+    gap: 0.2rem;
+    padding: 1rem 1.2rem;
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    background: var(--bg-elev);
+    color: var(--text);
+  }
+
+  .pager a:hover {
+    text-decoration: none;
+  }
+
+  .pager span {
+    font-size: 0.82rem;
+  }
+
+  .pager .next {
+    grid-column: 2;
+    text-align: right;
+  }
+
+  .toc {
+    display: none;
+  }
+
+  @media (min-width: 1100px) {
+    .post-layout.has-toc {
+      max-width: none;
+      display: grid;
+      grid-template-columns: minmax(0, var(--width)) 200px;
+      justify-content: center;
+      gap: 3rem;
+    }
+
+    .toc {
+      display: block;
+    }
+
+    .toc-inner {
+      position: sticky;
+      top: 90px;
+      margin-top: 3.2rem;
+      font-size: 0.85rem;
+    }
+
+    .toc-title {
+      font-size: 0.72rem;
+      font-weight: 600;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      color: var(--text-faint);
+      margin-bottom: 0.6rem;
+    }
+
+    .toc ol {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      border-left: 1px solid var(--border);
+    }
+
+    .toc li.d3 a {
+      padding-left: 1.6rem;
+    }
+
+    .toc a {
+      display: block;
+      padding: 0.25rem 0 0.25rem 0.9rem;
+      margin-left: -1px;
+      border-left: 2px solid transparent;
+      color: var(--text-muted);
+      line-height: 1.4;
+      transition:
+        color 0.2s,
+        border-color 0.2s;
+    }
+
+    .toc a:hover {
+      color: var(--text);
+      text-decoration: none;
+    }
+
+    .toc a.active {
+      color: var(--accent);
+      border-left-color: var(--accent);
+    }
+  }
+
+  @media (max-width: 560px) {
+    .pager {
+      grid-template-columns: 1fr;
+    }
+
+    .pager .next {
+      grid-column: 1;
+    }
+  }
+</style>

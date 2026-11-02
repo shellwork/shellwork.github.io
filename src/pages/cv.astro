@@ -1,0 +1,52 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Timeline from '../components/Timeline.astro';
+import { site } from '../site.config';
+import { getExperience, getPublications } from '../lib/content';
+import { url } from '../lib/utils';
+
+const experience = await getExperience();
+const pubCount = (await getPublications()).length;
+
+const groups = [
+  { kind: 'education', title: 'Education' },
+  { kind: 'research', title: 'Research Experience' },
+  { kind: 'industry', title: 'Industry Experience' },
+  { kind: 'teaching', title: 'Teaching' },
+  { kind: 'service', title: 'Service' },
+] as const;
+---
+
+<BaseLayout title="CV" description={`Curriculum vitae of ${site.name}.`}>
+  <header class="page-header">
+    <h1>Curriculum Vitae</h1>
+    <p>
+      {site.cvPdf ? <a href={url(site.cvPdf)}>Download PDF</a> : 'Education and research experience.'}
+    </p>
+  </header>
+
+  {
+    groups.map(({ kind, title }) => {
+      const items = experience.filter((e) => e.data.kind === kind);
+      return (
+        items.length > 0 && (
+          <section class="section">
+            <h2 class="section-title">{title}</h2>
+            <Timeline items={items} />
+          </section>
+        )
+      );
+    })
+  }
+
+  {
+    pubCount > 0 && (
+      <section class="section">
+        <h2 class="section-title">Publications</h2>
+        <p>
+          {pubCount} papers, listed on the <a href={url('/publications/')}>publications page</a>.
+        </p>
+      </section>
+    )
+  }
+</BaseLayout>

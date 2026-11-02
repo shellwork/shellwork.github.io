@@ -1,0 +1,405 @@
+/* Design tokens. Change colors and fonts here; everything else uses these variables. */
+:root {
+  --font-sans: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Inter', 'Helvetica Neue', Arial,
+    'PingFang SC', 'Hiragino Sans GB', 'Noto Sans SC', 'Microsoft YaHei', sans-serif;
+  --font-serif: 'Iowan Old Style', 'Palatino Linotype', Palatino, 'Source Serif Pro', Georgia,
+    'Songti SC', 'Noto Serif SC', serif;
+  --font-mono: ui-monospace, 'SF Mono', 'JetBrains Mono', Menlo, Consolas, monospace;
+
+  --bg: #fbfbf9;
+  --bg-elev: #ffffff;
+  --bg-subtle: #f2f2ee;
+  --text: #1d1f21;
+  --text-muted: #5d6166;
+  --text-faint: #8a8f94;
+  --border: #e3e3dd;
+  /* --accent itself is set from site.config.ts (theme.accent). */
+  --accent-soft: color-mix(in srgb, var(--accent) 11%, var(--bg));
+  --highlight: #8a2b2b;
+  --code-bg: #f4f4f0;
+
+  --radius: 10px;
+  --ease-out: cubic-bezier(0.2, 0.7, 0.2, 1);
+  --shadow-hover: 0 10px 30px -12px rgb(0 0 0 / 0.18);
+  --width: 760px;
+  --width-wide: 980px;
+
+  color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --bg: #111315;
+  --bg-elev: #181b1e;
+  --bg-subtle: #1d2124;
+  --text: #e6e6e3;
+  --text-muted: #a3a8ad;
+  --text-faint: #767c82;
+  --border: #2a2f33;
+  --accent-soft: color-mix(in srgb, var(--accent) 16%, var(--bg));
+  --highlight: #e5a0a0;
+  --code-bg: #1a1e21;
+  --shadow-hover: 0 10px 30px -12px rgb(0 0 0 / 0.6);
+  color-scheme: dark;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  -webkit-text-size-adjust: 100%;
+  text-rendering: optimizeLegibility;
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-sans);
+  font-size: 16.5px;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+/* Components set their own display; keep the hidden attribute authoritative. */
+[hidden] {
+  display: none !important;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+  text-underline-offset: 3px;
+}
+
+a:hover {
+  text-decoration: underline;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  line-height: 1.25;
+  letter-spacing: -0.01em;
+  margin: 0 0 0.5em;
+}
+
+h1 {
+  font-size: 2rem;
+}
+
+h2 {
+  font-size: 1.35rem;
+}
+
+h3 {
+  font-size: 1.1rem;
+}
+
+p {
+  margin: 0 0 1em;
+}
+
+code {
+  font-family: var(--font-mono);
+  font-size: 0.88em;
+  background: var(--code-bg);
+  padding: 0.12em 0.35em;
+  border-radius: 4px;
+}
+
+pre {
+  font-size: 0.88rem;
+  line-height: 1.55;
+  padding: 1rem 1.15rem;
+  border-radius: var(--radius);
+  overflow-x: auto;
+  border: 1px solid var(--border);
+}
+
+pre code {
+  background: none;
+  padding: 0;
+}
+
+hr {
+  border: 0;
+  border-top: 1px solid var(--border);
+  margin: 2rem 0;
+}
+
+.container {
+  width: 100%;
+  max-width: var(--width);
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+.container.wide {
+  max-width: var(--width-wide);
+}
+
+.section {
+  margin: 3rem 0;
+}
+
+.section-title {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 1rem;
+  font-size: 0.8rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--text-muted);
+  border-bottom: 1px solid var(--border);
+  padding-bottom: 0.5rem;
+  margin-bottom: 1.25rem;
+}
+
+.section-title a {
+  font-size: 0.8rem;
+  letter-spacing: 0.02em;
+  text-transform: none;
+  font-weight: 500;
+}
+
+.page-header {
+  margin: 3rem 0 2rem;
+}
+
+.page-header h1 {
+  font-family: var(--font-serif);
+  font-weight: 600;
+  font-size: 2.2rem;
+}
+
+.page-header p {
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.muted {
+  color: var(--text-muted);
+}
+
+.faint {
+  color: var(--text-faint);
+}
+
+.tag {
+  display: inline-block;
+  font-size: 0.78rem;
+  line-height: 1.4;
+  padding: 0.15rem 0.55rem;
+  border-radius: 999px;
+  background: var(--bg-subtle);
+  color: var(--text-muted);
+  border: 1px solid var(--border);
+}
+
+.tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+  padding: 0;
+  margin: 0;
+  list-style: none;
+}
+
+.pill-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.4rem;
+}
+
+.pill-links a,
+.pill-links button {
+  font: inherit;
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1.4;
+  padding: 0.12rem 0.55rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  color: var(--accent);
+  background: var(--bg-elev);
+  cursor: pointer;
+}
+
+.pill-links a:hover,
+.pill-links button:hover {
+  text-decoration: none;
+  border-color: var(--accent);
+}
+
+/* Long-form Markdown content (projects, posts). */
+.prose {
+  font-size: 1.04rem;
+}
+
+.prose h2 {
+  margin-top: 2.2rem;
+}
+
+.prose h3 {
+  margin-top: 1.8rem;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.4rem;
+}
+
+.prose li + li {
+  margin-top: 0.3rem;
+}
+
+.prose blockquote {
+  margin: 1.5rem 0;
+  padding: 0.25rem 1rem;
+  border-left: 3px solid var(--accent);
+  color: var(--text-muted);
+}
+
+.prose img {
+  border-radius: var(--radius);
+  display: block;
+  margin: 1.5rem auto;
+}
+
+.prose table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.95rem;
+  display: block;
+  overflow-x: auto;
+}
+
+.prose th,
+.prose td {
+  border-bottom: 1px solid var(--border);
+  padding: 0.5rem 0.75rem;
+  text-align: left;
+}
+
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap;
+}
+
+/* Animated underline for links in long-form text. */
+.prose a {
+  background: linear-gradient(currentColor, currentColor) no-repeat 0 100% / 0 1px;
+  transition: background-size 0.3s var(--ease-out);
+}
+
+.prose a:hover {
+  text-decoration: none;
+  background-size: 100% 1px;
+}
+
+/* Lift effect for cards. */
+.lift {
+  transition:
+    transform 0.25s var(--ease-out),
+    box-shadow 0.25s var(--ease-out),
+    border-color 0.25s;
+}
+
+.lift:hover {
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-hover);
+  border-color: color-mix(in srgb, var(--accent) 35%, var(--border));
+}
+
+/* ---- Motion. Everything below only applies when the `motion` class is on <html>,
+   which BaseLayout adds unless it is disabled or the visitor prefers reduced motion. ---- */
+
+:root.motion [data-reveal] {
+  opacity: 0;
+  translate: 0 16px;
+  transition:
+    opacity 0.7s var(--ease-out),
+    translate 0.7s var(--ease-out);
+  transition-delay: calc(var(--i, 0) * 70ms);
+}
+
+:root.motion [data-reveal].is-visible {
+  opacity: 1;
+  translate: none;
+}
+
+/* Cards both reveal and lift; keep both transitions, delaying only the reveal. */
+:root.motion .lift[data-reveal] {
+  transition:
+    opacity 0.7s var(--ease-out) calc(var(--i, 0) * 70ms),
+    translate 0.7s var(--ease-out) calc(var(--i, 0) * 70ms),
+    transform 0.25s var(--ease-out),
+    box-shadow 0.25s var(--ease-out),
+    border-color 0.25s;
+}
+
+/* An element inside an already-revealing block moves with its parent. */
+:root.motion [data-reveal] [data-reveal] {
+  opacity: 1;
+  translate: none;
+  transition: none;
+}
+
+/* Cross-page transitions (Chrome, Edge, Safari 18+; other browsers just load the page). */
+@media (prefers-reduced-motion: no-preference) {
+  @view-transition {
+    navigation: auto;
+  }
+
+  ::view-transition-old(root) {
+    animation: 0.18s ease-in both vt-fade-out;
+  }
+
+  ::view-transition-new(root) {
+    animation: 0.32s var(--ease-out) both vt-fade-in;
+  }
+}
+
+@keyframes vt-fade-out {
+  to {
+    opacity: 0;
+  }
+}
+
+@keyframes vt-fade-in {
+  from {
+    opacity: 0;
+    translate: 0 8px;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
+}
+
+/* Shiki: switch to the dark palette when the site is in dark mode. */
+:root[data-theme='dark'] .astro-code,
+:root[data-theme='dark'] .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: var(--shiki-dark-bg) !important;
+}
