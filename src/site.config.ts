@@ -16,7 +16,7 @@ export const site = {
 
   // Short bio on the home page. Markdown-style links are not parsed here; keep it plain text.
   bio: [
-    'I am an M.S. student in Automated Science at the School of Computer Science, Carnegie Mellon University, working with Prof. Min Xu and Prof. Rebecca E. Taylor.',
+    'I am an M.S. student in Automated Science at the School of Computer Science, Carnegie Mellon University.',
     'My research sits between AI and the life sciences: I build LLM agent systems that turn scientific intent into executable laboratory automation, and develop deep learning methods for biological data such as cryo-electron tomography and sequencing.',
     "Before CMU, I received my B.Sc. in Biomedical Statistics from Xi'an Jiaotong-Liverpool University (XJTLU), where I led the iGEM software team to a Gold Medal.",
   ],
