@@ -66,6 +66,11 @@ const themeVars = `:root{--accent:${accent.light};}:root[data-theme='dark']{--ac
         if (motion && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
           root.classList.add('motion');
         }
+        // Mark pages that arrive through the cross-page fade, so entrance animations
+        // (e.g. the home hero) do not play a second time on top of it.
+        addEventListener('pagereveal', (e) => {
+          root.classList.toggle('vt-entry', Boolean(e.viewTransition));
+        });
       })();
     </script>
   </head>
@@ -77,17 +82,19 @@ const themeVars = `:root{--accent:${accent.light};}:root[data-theme='dark']{--ac
       <slot />
     </main>
     <Footer />
-    <script>
+    <script is:inline>
       // Fade elements marked with data-reveal in as they scroll into view.
       // Siblings get a small stagger through the --i custom property.
-      const root = document.documentElement;
-      const items = document.querySelectorAll<HTMLElement>('[data-reveal]');
-      if (root.classList.contains('motion') && 'IntersectionObserver' in window) {
-        items.forEach((el) => {
-          const siblings = el.parentElement?.querySelectorAll(':scope > [data-reveal]');
-          const index = siblings ? Array.prototype.indexOf.call(siblings, el) : 0;
-          el.style.setProperty('--i', String(Math.min(index, 6)));
-        });
+      // Inline (not a module) so it runs before the first paint: whatever is already on
+      // screen arrives with the page itself (the cross-page fade), so it is shown at once
+      // instead of fading in a second time.
+      (() => {
+        const root = document.documentElement;
+        const items = document.querySelectorAll('[data-reveal]');
+        if (!root.classList.contains('motion') || !('IntersectionObserver' in window)) {
+          items.forEach((el) => el.classList.add('is-visible'));
+          return;
+        }
         const io = new IntersectionObserver(
           (entries) => {
             entries.forEach((entry) => {
@@ -99,10 +106,24 @@ const themeVars = `:root{--accent:${accent.light};}:root[data-theme='dark']{--ac
           },
           { rootMargin: '0px 0px -8% 0px' },
         );
-        items.forEach((el) => io.observe(el));
-      } else {
-        items.forEach((el) => el.classList.add('is-visible'));
-      }
+        const instant = [];
+        items.forEach((el) => {
+          const box = el.getBoundingClientRect();
+          if (box.top < innerHeight && box.bottom > 0) {
+            el.style.transition = 'none';
+            el.classList.add('is-visible');
+            instant.push(el);
+          } else {
+            const siblings = el.parentElement?.querySelectorAll(':scope > [data-reveal]');
+            const index = siblings ? Array.prototype.indexOf.call(siblings, el) : 0;
+            el.style.setProperty('--i', String(Math.min(index, 6)));
+            io.observe(el);
+          }
+        });
+        // Apply the instant styles, then give back the transitions (cards still lift on hover).
+        void document.body.offsetHeight;
+        instant.forEach((el) => el.style.removeProperty('transition'));
+      })();
     </script>
   </body>
 </html>
