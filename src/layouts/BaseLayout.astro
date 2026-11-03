@@ -44,17 +44,24 @@ const themeVars = `:root{--accent:${accent.light};}:root[data-theme='dark']{--ac
     <meta name="theme-color" content="#111315" media="(prefers-color-scheme: dark)" />
     <style set:html={themeVars}></style>
     <script is:inline define:vars={{ motion }}>
-      // Apply the saved or system theme before first paint to avoid a flash.
+      // Apply the theme before first paint to avoid a flash. The mode is 'light', 'dark',
+      // or 'auto' (nothing saved), which follows the system and updates when it changes.
       (() => {
         const root = document.documentElement;
-        let theme = null;
-        try {
-          theme = localStorage.getItem('theme');
-        } catch {}
-        if (theme !== 'light' && theme !== 'dark') {
-          theme = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
-        }
-        root.dataset.theme = theme;
+        const system = matchMedia('(prefers-color-scheme: dark)');
+        const apply = () => {
+          let mode = 'auto';
+          try {
+            const saved = localStorage.getItem('theme');
+            if (saved === 'light' || saved === 'dark') mode = saved;
+          } catch {}
+          root.dataset.themeMode = mode;
+          root.dataset.theme = mode === 'auto' ? (system.matches ? 'dark' : 'light') : mode;
+        };
+        apply();
+        system.addEventListener('change', apply);
+        // Keep other open tabs in sync when the toggle is used.
+        addEventListener('storage', (e) => e.key === 'theme' && apply());
         // Animations only run when enabled in site.config.ts and the visitor has not asked for reduced motion.
         if (motion && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
           root.classList.add('motion');
